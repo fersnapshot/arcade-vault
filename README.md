@@ -15,4 +15,12 @@ https://github.com/Klerith/fernando-skills
 npx skills@latest add Klerith/fernando-skills
 ```
 
-## Hola Mundo
+## Commands
+
+```bash
+npm run dev      # dev server
+npm run build    # production build
+npm run lint     # ESLint
+```
+
+No test runner is configured yet.
