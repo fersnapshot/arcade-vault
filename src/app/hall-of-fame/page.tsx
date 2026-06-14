@@ -9,7 +9,7 @@ const PODIUM_LABEL = ["#1", "#2", "#3"];
 const TABLE_RANK_CLASS = ["top1", "top2", "top3"];
 
 function getScores(gameId: string, gameBest: number) {
-  return seededScores(gameId.length * 31 + gameBest % 97, 15);
+  return seededScores(gameId.length * 31 + (gameBest % 97), 15);
 }
 
 export default function HallOfFamePage() {
@@ -47,7 +47,10 @@ export default function HallOfFamePage() {
           {podium.map((row, i) => {
             const realRank = i === 0 ? 2 : i === 1 ? 1 : 3;
             return (
-              <div key={row.rank} className={`podium-slot ${PODIUM_CLASS[realRank - 1]}`}>
+              <div
+                key={row.rank}
+                className={`podium-slot ${PODIUM_CLASS[realRank - 1]}`}
+              >
                 <div className="rank-num">{PODIUM_LABEL[realRank - 1]}</div>
                 <div className="name">{row.name}</div>
                 <div className="score">{row.score.toLocaleString()}</div>
@@ -68,7 +71,9 @@ export default function HallOfFamePage() {
           {scores.map((row, i) => (
             <div
               key={row.rank}
-              className={`tr${TABLE_RANK_CLASS[i] ? ` ${TABLE_RANK_CLASS[i]}` : ""}`}
+              className={`tr${
+                TABLE_RANK_CLASS[i] ? ` ${TABLE_RANK_CLASS[i]}` : ""
+              }`}
               style={{ animationDelay: `${i * 30}ms` }}
             >
               <span className="rk">#{row.rank}</span>

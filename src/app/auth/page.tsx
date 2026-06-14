@@ -30,16 +30,30 @@ export default function AuthPage() {
         <div className="auth-header">
           <div className="mark" />
           <h2>ARCADE VAULT</h2>
-          <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-faint)", marginTop: 4, letterSpacing: "0.16em" }}>
+          <p
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              color: "var(--ink-faint)",
+              marginTop: 4,
+              letterSpacing: "0.16em",
+            }}
+          >
             INSERT COIN TO CONTINUE
           </p>
         </div>
 
         <div className="auth-tabs">
-          <button className={tab === "login" ? "on" : ""} onClick={() => setTab("login")}>
+          <button
+            className={tab === "login" ? "on" : ""}
+            onClick={() => setTab("login")}
+          >
             INICIAR SESIÓN
           </button>
-          <button className={tab === "register" ? "on" : ""} onClick={() => setTab("register")}>
+          <button
+            className={tab === "register" ? "on" : ""}
+            onClick={() => setTab("register")}
+          >
             CREAR CUENTA
           </button>
         </div>
@@ -93,7 +107,11 @@ export default function AuthPage() {
             />
           </div>
 
-          <button type="submit" className="btn pulse" style={{ width: "100%", marginTop: 8 }}>
+          <button
+            type="submit"
+            className="btn pulse"
+            style={{ width: "100%", marginTop: 8 }}
+          >
             {tab === "login" ? "ENTRAR" : "REGISTRARSE"}
           </button>
         </form>

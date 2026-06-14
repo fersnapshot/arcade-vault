@@ -21,7 +21,9 @@ export default function GameCard({ game }: { game: Game }) {
     const { left, top, width, height } = el.getBoundingClientRect();
     const x = (e.clientX - left) / width - 0.5;
     const y = (e.clientY - top) / height - 0.5;
-    el.style.transform = `perspective(600px) rotateY(${x * 12}deg) rotateX(${-y * 10}deg) translateY(-4px)`;
+    el.style.transform = `perspective(600px) rotateY(${x * 12}deg) rotateX(${
+      -y * 10
+    }deg) translateY(-4px)`;
   }
 
   function handleMouseLeave() {
@@ -39,7 +41,10 @@ export default function GameCard({ game }: { game: Game }) {
       onClick={go}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ transition: "transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease" }}
+      style={{
+        transition:
+          "transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease",
+      }}
     >
       <div className="cover">
         <div className={`cover-bg ${game.cover}`} />
@@ -54,11 +59,14 @@ export default function GameCard({ game }: { game: Game }) {
       <div className="row">
         <div className="score-badge">
           <span>MEJOR SCORE</span>
-          <b>{game.best.toLocaleString()}</b>
+          <b>{game.best.toLocaleString("es-ES")}</b>
         </div>
         <button
           className="btn"
-          onClick={(e) => { e.stopPropagation(); go(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            go();
+          }}
         >
           JUGAR
         </button>

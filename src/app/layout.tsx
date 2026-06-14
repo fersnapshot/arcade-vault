@@ -33,13 +33,13 @@ export default function RootLayout({
       className={`${pressStart2P.variable} ${jetBrainsMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
-          <UserProvider>
-            <Nav />
-            <main className="flex-1">{children}</main>
-            <footer className="border-t border-white/10 py-6 text-center font-mono text-xs text-white/30 tracking-widest">
-              © 2026 ARCADE VAULT — INSERT COIN TO CONTINUE
-            </footer>
-          </UserProvider>
+        <UserProvider>
+          <Nav />
+          <main className="flex-1">{children}</main>
+          <footer className="border-t border-white/10 py-6 text-center font-mono text-xs text-white/30 tracking-widest">
+            © 2026 ARCADE VAULT — INSERT COIN TO CONTINUE
+          </footer>
+        </UserProvider>
       </body>
     </html>
   );

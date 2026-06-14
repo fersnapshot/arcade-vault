@@ -6,16 +6,45 @@ export interface ScoreRow {
 }
 
 const PLAYERS = [
-  "ACE", "BLZ", "CYB", "DOT", "EVA", "FLX", "GUN", "HXR",
-  "ICE", "JAX", "KAI", "LUX", "MAX", "NEO", "ORB", "PIX",
-  "QUE", "RAD", "SYN", "TRX", "ULT", "VEX", "WRX", "XNO",
-  "YGO", "ZAP",
+  "ACE",
+  "BLZ",
+  "CYB",
+  "DOT",
+  "EVA",
+  "FLX",
+  "GUN",
+  "HXR",
+  "ICE",
+  "JAX",
+  "KAI",
+  "LUX",
+  "MAX",
+  "NEO",
+  "ORB",
+  "PIX",
+  "QUE",
+  "RAD",
+  "SYN",
+  "TRX",
+  "ULT",
+  "VEX",
+  "WRX",
+  "XNO",
+  "YGO",
+  "ZAP",
 ];
 
 const DATES = [
-  "2026-06-01", "2026-05-28", "2026-05-14", "2026-04-30",
-  "2026-04-12", "2026-03-22", "2026-03-08", "2026-02-19",
-  "2026-02-03", "2026-01-17",
+  "2026-06-01",
+  "2026-05-28",
+  "2026-05-14",
+  "2026-04-30",
+  "2026-04-12",
+  "2026-03-22",
+  "2026-03-08",
+  "2026-02-19",
+  "2026-02-03",
+  "2026-01-17",
 ];
 
 function seededRandom(seed: number) {

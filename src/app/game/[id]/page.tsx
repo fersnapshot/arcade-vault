@@ -18,7 +18,7 @@ export default async function GamePage({
   const game = GAMES.find((g) => g.id === id);
   if (!game) notFound();
 
-  const scores = seededScores(game.id.length * 31 + game.best % 97);
+  const scores = seededScores(game.id.length * 31 + (game.best % 97));
 
   return (
     <>
@@ -29,7 +29,10 @@ export default async function GamePage({
         {/* Left column */}
         <div>
           <div className="detail-cover">
-            <div className={`cover-bg ${game.cover}`} style={{ position: "absolute", inset: 0 }} />
+            <div
+              className={`cover-bg ${game.cover}`}
+              style={{ position: "absolute", inset: 0 }}
+            />
           </div>
 
           <div className="leaderboard" style={{ marginTop: 24 }}>
@@ -37,7 +40,9 @@ export default async function GamePage({
             {scores.map((row) => (
               <div
                 key={row.rank}
-                className={`lb-row${RANK_CLASS[row.rank - 1] ? ` ${RANK_CLASS[row.rank - 1]}` : ""}`}
+                className={`lb-row${
+                  RANK_CLASS[row.rank - 1] ? ` ${RANK_CLASS[row.rank - 1]}` : ""
+                }`}
               >
                 <span className="rk">#{row.rank}</span>
                 <span className="pl">{row.name}</span>
@@ -69,7 +74,9 @@ export default async function GamePage({
             </div>
             <div>
               <div className="l">Categoría</div>
-              <div className="v" style={{ fontSize: 12 }}>{game.cat}</div>
+              <div className="v" style={{ fontSize: 12 }}>
+                {game.cat}
+              </div>
             </div>
           </div>
 
