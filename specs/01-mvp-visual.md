@@ -1,6 +1,6 @@
 # SPEC 01 — MVP visual de Arcade Vault: cinco pantallas con App Router
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** ninguno
 - **Date:** 2026-06-13
 - **Objective:** Implementar las cinco pantallas visuales del MVP de Arcade Vault como rutas reales de Next.js App Router, sin backend ni persistencia.
@@ -101,24 +101,24 @@ export interface UserContextValue {
 
 ## Acceptance criteria
 
-- [ ] `/` redirige automáticamente a `/library`.
-- [ ] La biblioteca muestra los 8 juegos del catálogo.
-- [ ] El buscador filtra juegos por nombre en tiempo real.
-- [ ] Los chips de categoría filtran el grid correctamente.
-- [ ] Hacer clic en una card o en JUGAR navega a `/game/[id]`.
-- [ ] La página de game muestra el cover, stats y leaderboard simulado del juego correcto.
-- [ ] El botón "JUGAR AHORA" en game navega a `/player/[id]`.
-- [ ] El reproductor muestra HUD con score, vidas y nivel.
-- [ ] El score sube automáticamente mientras no hay pausa ni fin de juego.
-- [ ] El botón PAUSA detiene el score y muestra overlay; REANUDAR lo continúa.
-- [ ] El botón FIN muestra el modal de fin de juego con el score final.
-- [ ] El modal de fin de juego muestra el estado "PUNTUACIÓN GUARDADA" al pulsar guardar (sin persistir nada).
-- [ ] `/auth` muestra los tabs INICIAR SESIÓN y CREAR CUENTA, y alterna el campo de email.
-- [ ] Iniciar sesión actualiza el `Nav` con el nombre del usuario.
-- [ ] Cerrar sesión desde el `Nav` vuelve a mostrar el botón "Iniciar Sesión".
-- [ ] El Salón de la Fama muestra pódium y tabla; los tabs cambian los scores por juego.
-- [ ] El `Nav` es responsive: en móvil aparece el menú hamburguesa con panel lateral.
-- [ ] No hay errores en consola al navegar entre todas las rutas.
+- [x] `/` redirige automáticamente a `/library`.
+- [x] La biblioteca muestra los 8 juegos del catálogo.
+- [x] El buscador filtra juegos por nombre en tiempo real.
+- [x] Los chips de categoría filtran el grid correctamente.
+- [x] Hacer clic en una card o en JUGAR navega a `/game/[id]`.
+- [x] La página de game muestra el cover, stats y leaderboard simulado del juego correcto.
+- [x] El botón "JUGAR AHORA" en game navega a `/player/[id]`.
+- [x] El reproductor muestra HUD con score, vidas y nivel.
+- [x] El score sube automáticamente mientras no hay pausa ni fin de juego.
+- [x] El botón PAUSA detiene el score y muestra overlay; REANUDAR lo continúa.
+- [x] El botón FIN muestra el modal de fin de juego con el score final.
+- [x] El modal de fin de juego muestra el estado "PUNTUACIÓN GUARDADA" al pulsar guardar (sin persistir nada).
+- [x] `/auth` muestra los tabs INICIAR SESIÓN y CREAR CUENTA, y alterna el campo de email.
+- [x] Iniciar sesión actualiza el `Nav` con el nombre del usuario.
+- [x] Cerrar sesión desde el `Nav` vuelve a mostrar el botón "Iniciar Sesión".
+- [x] El Salón de la Fama muestra pódium y tabla; los tabs cambian los scores por juego.
+- [x] El `Nav` es responsive: en móvil aparece el menú hamburguesa con panel lateral.
+- [x] No hay errores en consola al navegar entre todas las rutas.
 
 ---
 
