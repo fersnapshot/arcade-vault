@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Press_Start_2P, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { UserProvider } from "@/context/UserContext";
+import Nav from "@/components/Nav";
 
 const pressStart2P = Press_Start_2P({
   weight: "400",
@@ -30,7 +32,15 @@ export default function RootLayout({
       lang="es"
       className={`${pressStart2P.variable} ${jetBrainsMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+          <UserProvider>
+            <Nav />
+            <main className="flex-1">{children}</main>
+            <footer className="border-t border-white/10 py-6 text-center font-mono text-xs text-white/30 tracking-widest">
+              © 2026 ARCADE VAULT — INSERT COIN TO CONTINUE
+            </footer>
+          </UserProvider>
+      </body>
     </html>
   );
 }
