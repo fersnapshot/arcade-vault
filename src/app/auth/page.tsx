@@ -14,7 +14,7 @@ export default function AuthPage() {
   const { login } = useUser();
   const router = useRouter();
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     const playerName = name.trim() || email.split("@")[0];
     login({ name: playerName });
