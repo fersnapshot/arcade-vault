@@ -16,22 +16,19 @@ export default function LibraryPage() {
 
   return (
     <>
-      <div className="av-bg" />
-      <div className="av-noise" />
-
       <section className="av-hero">
-        <h1>GAME LIBRARY</h1>
-        <p className="sub">
-          SELECT YOUR GAME<span className="blink">_</span>
-        </p>
+        <h1 className="flicker">ARCADE VAULT</h1>
+        <div className="sub">
+          INSERTA UNA MONEDA PARA JUGAR <span className="blink">_</span>
+        </div>
       </section>
 
       <div className="av-filters">
         <div className="av-search">
-          <span className="ico">▶</span>
+          <span className="ico">⌕</span>
           <input
             type="text"
-            placeholder="BUSCAR JUEGO..."
+            placeholder="Buscar un juego por nombre…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
@@ -52,9 +49,26 @@ export default function LibraryPage() {
 
       <div className="av-grid">
         {filtered.length === 0 ? (
-          <p className="col-span-full text-center font-mono text-sm text-[var(--ink-faint)] py-16 tracking-widest">
-            NO SE ENCONTRARON JUEGOS
-          </p>
+          <div
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center",
+              padding: 80,
+              color: "var(--ink-faint)",
+            }}
+          >
+            <div
+              className="pixel"
+              style={{
+                fontSize: 14,
+                color: "var(--magenta)",
+                marginBottom: 12,
+              }}
+            >
+              NO HAY RESULTADOS
+            </div>
+            <div>Intenta otra búsqueda o categoría.</div>
+          </div>
         ) : (
           filtered.map((game) => <GameCard key={game.id} game={game} />)
         )}

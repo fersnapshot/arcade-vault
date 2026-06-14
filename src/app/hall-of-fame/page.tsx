@@ -20,9 +20,6 @@ export default function HallOfFamePage() {
 
   return (
     <>
-      <div className="av-bg" />
-      <div className="av-noise" />
-
       <div className="av-hall fade-in">
         <div className="hall-head">
           <h1>SALÓN DE LA FAMA</h1>

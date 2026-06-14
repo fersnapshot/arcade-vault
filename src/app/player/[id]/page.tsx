@@ -58,9 +58,6 @@ export default function PlayerPage({
 
   return (
     <div className="av-player fade-in">
-      <div className="av-bg" />
-      <div className="av-noise" />
-
       {/* HUD */}
       <div className="player-hud">
         <div className="hud-stat">

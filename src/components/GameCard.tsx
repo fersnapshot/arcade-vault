@@ -4,12 +4,11 @@ import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import type { Game } from "@/data/games";
 
-const COLOR_CLASS: Record<Game["color"], string> = {
-  cyan: "neon-cyan",
-  magenta: "neon-magenta",
-  green: "neon-green",
-  yellow: "neon-yellow",
-};
+function btnColorClass(color: Game["color"]) {
+  if (color === "magenta") return "btn magenta";
+  if (color === "yellow") return "btn yellow";
+  return "btn";
+}
 
 export default function GameCard({ game }: { game: Game }) {
   const router = useRouter();
@@ -18,12 +17,10 @@ export default function GameCard({ game }: { game: Game }) {
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = cardRef.current;
     if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const x = (e.clientX - left) / width - 0.5;
-    const y = (e.clientY - top) / height - 0.5;
-    el.style.transform = `perspective(600px) rotateY(${x * 12}deg) rotateX(${
-      -y * 10
-    }deg) translateY(-4px)`;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `translateY(-6px) rotateX(${-py * 6}deg) rotateY(${px * 8}deg)`;
   }
 
   function handleMouseLeave() {
@@ -41,35 +38,26 @@ export default function GameCard({ game }: { game: Game }) {
       onClick={go}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
-        transition:
-          "transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease",
-      }}
     >
       <div className="cover">
         <div className={`cover-bg ${game.cover}`} />
-        <span className="label">{game.cat}</span>
+        <div className="label">{game.cat}</div>
       </div>
-
       <div className="meta">
-        <div className={`title ${COLOR_CLASS[game.color]}`}>{game.title}</div>
+        <div className="title">{game.title}</div>
         <div className="desc">{game.short}</div>
-      </div>
-
-      <div className="row">
-        <div className="score-badge">
-          <span>MEJOR SCORE</span>
-          <b>{game.best.toLocaleString("es-ES")}</b>
+        <div className="row">
+          <div className="score-badge">
+            <span>MEJOR PUNTUACIÓN</span>
+            <b>{game.best.toLocaleString("es-ES")}</b>
+          </div>
+          <button
+            className={btnColorClass(game.color)}
+            onClick={(e) => { e.stopPropagation(); go(); }}
+          >
+            JUGAR
+          </button>
         </div>
-        <button
-          className="btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            go();
-          }}
-        >
-          JUGAR
-        </button>
       </div>
     </div>
   );

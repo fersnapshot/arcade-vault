@@ -23,8 +23,6 @@ export default function AuthPage() {
 
   return (
     <div className="av-auth-wrap">
-      <div className="av-bg" />
-      <div className="av-noise" />
 
       <div className="auth-card fade-in">
         <div className="auth-header">

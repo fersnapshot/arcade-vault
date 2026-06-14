@@ -33,10 +33,12 @@ export default function RootLayout({
       className={`${pressStart2P.variable} ${jetBrainsMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
+        <div className="av-bg" />
+        <div className="av-noise" />
         <UserProvider>
           <Nav />
-          <main className="flex-1">{children}</main>
-          <footer className="border-t border-white/10 py-6 text-center font-mono text-xs text-white/30 tracking-widest">
+          <main className="flex-1" style={{ position: "relative", zIndex: 2 }}>{children}</main>
+          <footer className="border-t border-white/10 py-6 text-center font-mono text-xs text-white/30 tracking-widest" style={{ position: "relative", zIndex: 2 }}>
             © 2026 ARCADE VAULT — INSERT COIN TO CONTINUE
           </footer>
         </UserProvider>

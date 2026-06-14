@@ -22,9 +22,6 @@ export default async function GamePage({
 
   return (
     <>
-      <div className="av-bg" />
-      <div className="av-noise" />
-
       <div className="av-detail fade-in">
         {/* Left column */}
         <div>
