@@ -212,7 +212,7 @@ a {
   gap: 10px;
   cursor: pointer;
 }
-.av-nav .logo-mark {
+.av-nav-logo-mark {
   width: 28px;
   height: 28px;
   background: linear-gradient(45deg, var(--magenta) 0 50%, transparent 50%),

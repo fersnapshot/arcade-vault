@@ -71,8 +71,8 @@ Todo se computa en el módulo de la página, sin estado React ni efectos.
 ## Acceptance criteria
 
 - [x] La ruta `/` muestra la homepage; no redirige a `/games`.
-- [ ] El Nav muestra: logo con ícono pixel + "ARCADE VAULT" (cyan/magenta), links Inicio/Biblioteca/Salón de la Fama/Acerca de, créditos hardcodeados y botón de sesión.
-- [ ] El link activo en el Nav tiene color cyan y línea inferior visible.
+- [x] El Nav muestra: logo con ícono pixel + "ARCADE VAULT" (cyan/magenta), links Inicio/Biblioteca/Salón de la Fama/Acerca de, créditos hardcodeados y botón de sesión.
+- [x] El link activo en el Nav tiene color cyan y línea inferior visible.
 - [x] "Acerca de" aparece en el Nav pero no es clickeable (sin ruta aún).
 - [x] El hero muestra el título en 3 líneas con colores neon, los dos CTAs y las siluetas flotantes pixel-art.
 - [x] Las secciones aparecen con animación fade-in al hacer scroll (IntersectionObserver).

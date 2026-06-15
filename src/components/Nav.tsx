@@ -12,19 +12,6 @@ const LINKS = [
   { href: "/about", label: "Acerca de", disabled: true },
 ];
 
-function LogoMark() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-      <rect x="6" y="0" width="8" height="2" fill="#00f5ff" />
-      <rect x="2" y="2" width="16" height="2" fill="#00f5ff" />
-      <rect x="0" y="4" width="20" height="8" fill="#00f5ff" />
-      <rect x="2" y="12" width="16" height="2" fill="#00f5ff" />
-      <rect x="6" y="14" width="8" height="2" fill="#00f5ff" />
-      <rect x="8" y="4" width="4" height="8" fill="#0a0a0f" />
-    </svg>
-  );
-}
-
 export default function Nav() {
   const pathname = usePathname();
   const { user, signOut } = useUser();
@@ -40,8 +27,8 @@ export default function Nav() {
       <div className="mx-auto flex max-w-7xl items-center gap-8 px-4 py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <LogoMark />
-          <span className="font-pixel text-[9px] tracking-widest leading-none">
+          <div className="av-nav-logo-mark" />
+          <span className="font-pixel text-xs tracking-widest leading-none">
             <span className="text-[var(--cyan)]">ARCADE</span>{" "}
             <span className="text-[var(--magenta)]">VAULT</span>
           </span>
@@ -55,7 +42,7 @@ export default function Nav() {
               return (
                 <span
                   key={href}
-                  className="font-mono text-xs tracking-widest text-white/20 cursor-not-allowed"
+                  className="font-pixel text-[9px] tracking-widest text-white/20 cursor-not-allowed"
                 >
                   {label}
                 </span>
@@ -65,9 +52,9 @@ export default function Nav() {
               <Link
                 key={href}
                 href={href}
-                className={`font-mono text-xs tracking-widest transition-colors relative pb-0.5 ${
+                className={`font-pixel text-[9px] tracking-widest transition-colors relative pb-0.5 ${
                   active
-                    ? "text-[var(--cyan)] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[var(--cyan)]"
+                    ? "text-[var(--cyan)]! after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[var(--cyan)]"
                     : "text-white/50 hover:text-white"
                 }`}
               >
