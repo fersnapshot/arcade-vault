@@ -122,9 +122,21 @@ export default function Nav() {
           onClick={() => setOpen((o) => !o)}
           aria-label="Menú"
         >
-          <span className={`block w-5 h-px bg-white transition-all ${open ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`block w-5 h-px bg-white transition-all ${open ? "opacity-0" : ""}`} />
-          <span className={`block w-5 h-px bg-white transition-all ${open ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span
+            className={`block w-5 h-px bg-white transition-all ${
+              open ? "rotate-45 translate-y-2" : ""
+            }`}
+          />
+          <span
+            className={`block w-5 h-px bg-white transition-all ${
+              open ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`block w-5 h-px bg-white transition-all ${
+              open ? "-rotate-45 -translate-y-2" : ""
+            }`}
+          />
         </button>
       </div>
 
@@ -135,7 +147,10 @@ export default function Nav() {
             const active = isActive(href);
             if (disabled) {
               return (
-                <span key={href} className="font-mono text-sm tracking-widest text-white/20">
+                <span
+                  key={href}
+                  className="font-mono text-sm tracking-widest text-white/20"
+                >
                   {label}
                 </span>
               );
@@ -146,7 +161,9 @@ export default function Nav() {
                 href={href}
                 onClick={() => setOpen(false)}
                 className={`font-mono text-sm tracking-widest transition-colors ${
-                  active ? "text-[var(--cyan)]" : "text-white/70 hover:text-white"
+                  active
+                    ? "text-[var(--cyan)]"
+                    : "text-white/70 hover:text-white"
                 }`}
               >
                 {label}
@@ -155,7 +172,12 @@ export default function Nav() {
           })}
           <div className="border-t border-white/10 pt-4 flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <svg width="10" height="10" viewBox="0 0 20 20" aria-hidden="true">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
                 <rect x="6" y="0" width="8" height="2" fill="#ffcf3a" />
                 <rect x="2" y="2" width="16" height="2" fill="#ffcf3a" />
                 <rect x="0" y="4" width="20" height="12" fill="#ffcf3a" />
@@ -163,13 +185,20 @@ export default function Nav() {
                 <rect x="6" y="18" width="8" height="2" fill="#ffcf3a" />
                 <rect x="8" y="4" width="4" height="12" fill="#0a0a0f" />
               </svg>
-              <span className="font-pixel text-[8px] text-[var(--gold)] tracking-widest">CRÉDITOS · 03</span>
+              <span className="font-pixel text-[8px] text-[var(--gold)] tracking-widest">
+                CRÉDITOS · 03
+              </span>
             </div>
             {user ? (
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-[var(--yellow)] tracking-widest">▶ {user.name}</span>
+                <span className="font-mono text-xs text-[var(--yellow)] tracking-widest">
+                  ▶ {user.name}
+                </span>
                 <button
-                  onClick={() => { signOut(); setOpen(false); }}
+                  onClick={() => {
+                    signOut();
+                    setOpen(false);
+                  }}
                   className="font-mono text-xs text-white/40 hover:text-white tracking-widest"
                 >
                   SALIR

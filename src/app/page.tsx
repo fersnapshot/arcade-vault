@@ -74,7 +74,15 @@ function FloatingSilhouettes() {
         <g fill="#00ff88">
           <rect x="10" y="0" width="4" height="24" />
           <rect x="0" y="10" width="24" height="4" />
-          <rect x="6" y="6" width="12" height="12" fill="none" stroke="#00ff88" strokeWidth="2" />
+          <rect
+            x="6"
+            y="6"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="#00ff88"
+            strokeWidth="2"
+          />
         </g>
       </svg>
       {/* UFO */}
@@ -151,7 +159,15 @@ function FeatureIcon({ kind }: { kind: string }) {
     return (
       <svg className="ft-icon" viewBox="0 0 16 16">
         <g fill={C}>
-          <rect x="3" y="3" width="10" height="10" fill="none" stroke={C} strokeWidth="1.5" />
+          <rect
+            x="3"
+            y="3"
+            width="10"
+            height="10"
+            fill="none"
+            stroke={C}
+            strokeWidth="1.5"
+          />
           <rect x="5" y="6" width="1.5" height="4" />
           <rect x="5" y="6" width="4" height="1.5" />
           <rect x="5" y="8" width="3" height="1" />
@@ -194,20 +210,54 @@ function FeatureIcon({ kind }: { kind: string }) {
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 const FEATURES = [
-  { i: "GAMEPAD", t: "JUEGOS CLÁSICOS",   d: "Arkanoid, Tetris, Snake y muchos más. Los mejores arcades de todos los tiempos en un solo lugar.", c: "cyan" },
-  { i: "FREE",    t: "100% GRATIS",        d: "Sin suscripciones, sin pagos ocultos. Todos los juegos disponibles de forma gratuita.",             c: "yellow" },
-  { i: "TROPHY",  t: "LADDER BOARDS",      d: "Compite con jugadores de todo el mundo. Escala el ranking y demuestra quién es el mejor.",          c: "magenta" },
-  { i: "ROCKET",  t: "SIEMPRE CRECIENDO",  d: "Agregamos nuevos juegos constantemente. Vuelve seguido, siempre habrá algo nuevo que jugar.",       c: "green" },
+  {
+    i: "GAMEPAD",
+    t: "JUEGOS CLÁSICOS",
+    d: "Arkanoid, Tetris, Snake y muchos más. Los mejores arcades de todos los tiempos en un solo lugar.",
+    c: "cyan",
+  },
+  {
+    i: "FREE",
+    t: "100% GRATIS",
+    d: "Sin suscripciones, sin pagos ocultos. Todos los juegos disponibles de forma gratuita.",
+    c: "yellow",
+  },
+  {
+    i: "TROPHY",
+    t: "LADDER BOARDS",
+    d: "Compite con jugadores de todo el mundo. Escala el ranking y demuestra quién es el mejor.",
+    c: "magenta",
+  },
+  {
+    i: "ROCKET",
+    t: "SIEMPRE CRECIENDO",
+    d: "Agregamos nuevos juegos constantemente. Vuelve seguido, siempre habrá algo nuevo que jugar.",
+    c: "green",
+  },
 ] as const;
 
 const STATS = [
-  { n: "12+",    u: "JUEGOS",   s: "Y CONTANDO" },
-  { n: "MILES",  u: "DE PARTIDAS", s: "JUGADAS CADA DÍA" },
-  { n: "GLOBAL", u: "RANKING",  s: "COMPITE CON EL MUNDO" },
+  { n: "12+", u: "JUEGOS", s: "Y CONTANDO" },
+  { n: "MILES", u: "DE PARTIDAS", s: "JUGADAS CADA DÍA" },
+  { n: "GLOBAL", u: "RANKING", s: "COMPITE CON EL MUNDO" },
 ] as const;
 
-const RELATIVE_TIMES = ["hace 2 min", "hace 5 min", "hace 8 min", "hace 12 min", "hace 18 min", "hace 24 min"];
-const NEON_COLORS = ["cyan", "yellow", "green", "magenta", "cyan", "yellow"] as const;
+const RELATIVE_TIMES = [
+  "hace 2 min",
+  "hace 5 min",
+  "hace 8 min",
+  "hace 12 min",
+  "hace 18 min",
+  "hace 24 min",
+];
+const NEON_COLORS = [
+  "cyan",
+  "yellow",
+  "green",
+  "magenta",
+  "cyan",
+  "yellow",
+] as const;
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function HomePage() {
@@ -241,8 +291,12 @@ export default function HomePage() {
             Sin descargas. Sin costo. Solo diversión.
           </p>
           <div className="home-ctas">
-            <Link href="/games" className="btn xl pulse">▶&nbsp;&nbsp;EXPLORAR JUEGOS</Link>
-            <Link href="/auth" className="btn xl magenta">✦&nbsp;&nbsp;CREAR CUENTA</Link>
+            <Link href="/games" className="btn xl pulse">
+              ▶&nbsp;&nbsp;EXPLORAR JUEGOS
+            </Link>
+            <Link href="/auth" className="btn xl magenta">
+              ✦&nbsp;&nbsp;CREAR CUENTA
+            </Link>
           </div>
           <div className="hero-scroll" aria-hidden="true">
             <span>DESLIZA</span>
@@ -294,7 +348,9 @@ export default function HomePage() {
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 24 }}>
-          <Link href="/games" className="btn lg">VER TODOS LOS JUEGOS →</Link>
+          <Link href="/games" className="btn lg">
+            VER TODOS LOS JUEGOS →
+          </Link>
         </div>
       </section>
 
@@ -337,7 +393,9 @@ export default function HomePage() {
                 >
                   <span className={`tk-p neon-${r.color}`}>{r.name}</span>
                   <span className="tk-mid">▸ {r.game}</span>
-                  <span className="tk-s">+{r.score.toLocaleString("es-ES")}</span>
+                  <span className="tk-s">
+                    +{r.score.toLocaleString("es-ES")}
+                  </span>
                   <span className="tk-t">{r.time}</span>
                 </div>
               ))}
@@ -347,21 +405,40 @@ export default function HomePage() {
           {/* Top jugadores */}
           <div className="activity-card">
             <div className="ac-head">
-              <div className="ac-title pixel neon-magenta">▸ TOP JUGADORES · HOY</div>
-              <Link href="/hall-of-fame" className="lb-link">VER SALÓN →</Link>
+              <div className="ac-title pixel neon-magenta">
+                ▸ TOP JUGADORES · HOY
+              </div>
+              <Link href="/hall-of-fame" className="lb-link">
+                VER SALÓN →
+              </Link>
             </div>
             <div className="top-list">
               {topPlayers.map((r, i) => (
                 <div
                   key={r.rank}
-                  className={`top-row${i === 0 ? " top1" : i === 1 ? " top2" : i === 2 ? " top3" : ""}`}
+                  className={`top-row${
+                    i === 0
+                      ? " top1"
+                      : i === 1
+                      ? " top2"
+                      : i === 2
+                      ? " top3"
+                      : ""
+                  }`}
                 >
-                  <span className="tp-rk">#{String(r.rank).padStart(2, "0")}</span>
+                  <span className="tp-rk">
+                    #{String(r.rank).padStart(2, "0")}
+                  </span>
                   <span className="tp-bar">
-                    <span className="tp-fill" style={{ width: `${100 - i * 16}%` }} />
+                    <span
+                      className="tp-fill"
+                      style={{ width: `${100 - i * 16}%` }}
+                    />
                   </span>
                   <span className="tp-p">{r.name}</span>
-                  <span className="tp-s">{r.score.toLocaleString("es-ES")}</span>
+                  <span className="tp-s">
+                    {r.score.toLocaleString("es-ES")}
+                  </span>
                 </div>
               ))}
             </div>
@@ -393,30 +470,42 @@ export default function HomePage() {
               <li>✔ Nuevos juegos cada mes</li>
               <li>✔ Funciona en cualquier navegador</li>
             </ul>
-            <Link href="/auth" className="btn xl pulse" style={{ width: "100%", display: "flex" }}>
+            <Link
+              href="/auth"
+              className="btn xl pulse"
+              style={{ width: "100%", display: "flex" }}
+            >
               EMPEZAR GRATIS →
             </Link>
             <div className="pc-foot">No pedimos tarjeta. Nunca lo haremos.</div>
-            <div className="pc-stamp pixel">FREE<br />PLAY</div>
+            <div className="pc-stamp pixel">
+              FREE
+              <br />
+              PLAY
+            </div>
           </div>
 
           <div className="pricing-faq">
             <div className="faq-item">
               <div className="faq-q pixel">¿REALMENTE ES GRATIS?</div>
               <div className="faq-a">
-                Sí. Arcade Vault es un proyecto sin fines de lucro hecho por amor a los clásicos. No hay versión &quot;premium&quot; escondida.
+                Sí. Arcade Vault es un proyecto sin fines de lucro hecho por
+                amor a los clásicos. No hay versión &quot;premium&quot;
+                escondida.
               </div>
             </div>
             <div className="faq-item">
               <div className="faq-q pixel">¿NECESITO CREAR CUENTA?</div>
               <div className="faq-a">
-                No. Puedes jugar como invitado. Si quieres guardar tu puntuación y aparecer en el ranking, regístrate en 10 segundos.
+                No. Puedes jugar como invitado. Si quieres guardar tu puntuación
+                y aparecer en el ranking, regístrate en 10 segundos.
               </div>
             </div>
             <div className="faq-item">
               <div className="faq-q pixel">¿CÓMO SOBREVIVEN SIN COBRAR?</div>
               <div className="faq-a">
-                Es un proyecto comunitario. Si te gusta, compártelo. Esa es toda la moneda que aceptamos.
+                Es un proyecto comunitario. Si te gusta, compártelo. Esa es toda
+                la moneda que aceptamos.
               </div>
             </div>
           </div>
@@ -426,8 +515,12 @@ export default function HomePage() {
       {/* ── 7. CTA FINAL ────────────────────────────────────────────────── */}
       <section className="home-final reveal">
         <h2 className="final-title pixel">¿LISTO PARA JUGAR?</h2>
-        <Link href="/games" className="btn xl pulse final-cta">INSERTAR MONEDA →</Link>
-        <div className="final-tag">Gratis. Sin registro obligatorio. Empieza en segundos.</div>
+        <Link href="/games" className="btn xl pulse final-cta">
+          INSERTAR MONEDA →
+        </Link>
+        <div className="final-tag">
+          Gratis. Sin registro obligatorio. Empieza en segundos.
+        </div>
       </section>
     </div>
   );

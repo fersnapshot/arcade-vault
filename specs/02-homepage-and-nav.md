@@ -70,17 +70,17 @@ Todo se computa en el módulo de la página, sin estado React ni efectos.
 
 ## Acceptance criteria
 
-- [ ] La ruta `/` muestra la homepage; no redirige a `/games`.
+- [x] La ruta `/` muestra la homepage; no redirige a `/games`.
 - [ ] El Nav muestra: logo con ícono pixel + "ARCADE VAULT" (cyan/magenta), links Inicio/Biblioteca/Salón de la Fama/Acerca de, créditos hardcodeados y botón de sesión.
 - [ ] El link activo en el Nav tiene color cyan y línea inferior visible.
-- [ ] "Acerca de" aparece en el Nav pero no es clickeable (sin ruta aún).
-- [ ] El hero muestra el título en 3 líneas con colores neon, los dos CTAs y las siluetas flotantes pixel-art.
-- [ ] Las secciones aparecen con animación fade-in al hacer scroll (IntersectionObserver).
-- [ ] La sección "Juegos disponibles ahora" muestra exactamente los primeros 6 juegos de `GAMES` con sus covers CSS y links a `/game/[id]`.
-- [ ] La sección "Actividad en vivo" muestra datos derivados de `seededScores` — no arrays hardcodeados en el JSX.
-- [ ] La sección "Precios" muestra el plan $0 con la lista de features, el stamp "FREE PLAY" y los 3 FAQs.
-- [ ] La página es responsive: el Nav colapsa a hamburger en móvil, las grids se apilan en una columna.
-- [ ] No hay errores de TypeScript ni warnings de consola al cargar la ruta `/`.
+- [x] "Acerca de" aparece en el Nav pero no es clickeable (sin ruta aún).
+- [x] El hero muestra el título en 3 líneas con colores neon, los dos CTAs y las siluetas flotantes pixel-art.
+- [x] Las secciones aparecen con animación fade-in al hacer scroll (IntersectionObserver).
+- [x] La sección "Juegos disponibles ahora" muestra exactamente los primeros 6 juegos de `GAMES` con sus covers CSS y links a `/game/[id]`.
+- [x] La sección "Actividad en vivo" muestra datos derivados de `seededScores` — no arrays hardcodeados en el JSX.
+- [x] La sección "Precios" muestra el plan $0 con la lista de features, el stamp "FREE PLAY" y los 3 FAQs.
+- [x] La página es responsive: el Nav colapsa a hamburger en móvil, las grids se apilan en una columna.
+- [x] No hay errores de TypeScript ni warnings de consola al cargar la ruta `/`.
 
 ---
 
