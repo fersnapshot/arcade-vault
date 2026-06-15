@@ -308,7 +308,7 @@ export default function HomePage() {
       {/* ── 2. ¿POR QUÉ ARCADE VAULT? ──────────────────────────────────── */}
       <section className="home-section reveal">
         <div className="section-head">
-          <div className="kicker pixel neon-magenta">// 01</div>
+          <div className="kicker pixel neon-magenta">{"// 01"}</div>
           <h2 className="section-title">¿POR QUÉ ARCADE VAULT?</h2>
           <div className="section-rule" />
         </div>
@@ -330,13 +330,13 @@ export default function HomePage() {
       {/* ── 3. JUEGOS DISPONIBLES AHORA ─────────────────────────────────── */}
       <section className="home-section reveal">
         <div className="section-head">
-          <div className="kicker pixel neon-cyan">// 02</div>
+          <div className="kicker pixel neon-cyan">{"// 02"}</div>
           <h2 className="section-title">JUEGOS DISPONIBLES AHORA</h2>
           <div className="section-rule" />
         </div>
         <div className="mini-rail">
           {GAMES.slice(0, 6).map((g) => (
-            <Link key={g.id} href={`/game/${g.id}`} className="mini-card">
+            <Link key={g.id} href={`/games/${g.id}`} className="mini-card">
               <div className="mini-cover">
                 <div className={`cover-bg ${g.cover}`} />
               </div>
@@ -374,7 +374,7 @@ export default function HomePage() {
       {/* ── 5. ACTIVIDAD EN VIVO ─────────────────────────────────────────── */}
       <section className="home-section reveal">
         <div className="section-head">
-          <div className="kicker pixel neon-yellow">// 03</div>
+          <div className="kicker pixel neon-yellow">{"// 03"}</div>
           <h2 className="section-title">ACTIVIDAD EN VIVO</h2>
           <div className="section-rule" />
         </div>
@@ -449,7 +449,7 @@ export default function HomePage() {
       {/* ── 6. PRECIOS ──────────────────────────────────────────────────── */}
       <section className="home-section reveal">
         <div className="section-head">
-          <div className="kicker pixel neon-green">// 04</div>
+          <div className="kicker pixel neon-green">{"// 04"}</div>
           <h2 className="section-title">PRECIOS</h2>
           <div className="section-rule" />
         </div>

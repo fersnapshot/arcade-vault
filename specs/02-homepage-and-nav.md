@@ -1,6 +1,6 @@
 # SPEC 02 — Homepage de Arcade Vault
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 01-mvp-visual
 - **Date:** 2026-06-15
 - **Objective:** Crear la ruta `/` como homepage con hero, features, juegos, stats, actividad en vivo, precios y CTA final; y actualizar `Nav` para añadir el link "Inicio" y el contador de créditos hardcodeado.
