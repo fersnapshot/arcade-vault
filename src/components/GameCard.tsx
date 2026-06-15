@@ -20,7 +20,9 @@ export default function GameCard({ game }: { game: Game }) {
     const r = el.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
     const py = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `translateY(-6px) rotateX(${-py * 6}deg) rotateY(${px * 8}deg)`;
+    el.style.transform = `translateY(-6px) rotateX(${-py * 6}deg) rotateY(${
+      px * 8
+    }deg)`;
   }
 
   function handleMouseLeave() {
@@ -29,7 +31,7 @@ export default function GameCard({ game }: { game: Game }) {
     el.style.transform = "";
   }
 
-  const go = () => router.push(`/game/${game.id}`);
+  const go = () => router.push(`/games/${game.id}`);
 
   return (
     <div
@@ -53,7 +55,10 @@ export default function GameCard({ game }: { game: Game }) {
           </div>
           <button
             className={btnColorClass(game.color)}
-            onClick={(e) => { e.stopPropagation(); go(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              go();
+            }}
           >
             JUGAR
           </button>

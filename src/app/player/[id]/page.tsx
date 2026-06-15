@@ -151,12 +151,12 @@ export default function PlayerPage({
                   <button className="btn pulse" onClick={saveScore}>
                     GUARDAR
                   </button>
-                  <Link href={`/game/${game.id}`} className="btn ghost">
+                  <Link href={`/games/${game.id}`} className="btn ghost">
                     VER FICHA
                   </Link>
                   <button
                     className="btn ghost"
-                    onClick={() => router.push("/library")}
+                    onClick={() => router.push("/games")}
                   >
                     SALIR
                   </button>
@@ -166,7 +166,7 @@ export default function PlayerPage({
               <>
                 <div className="toast-saved">✓ PUNTUACIÓN GUARDADA</div>
                 <div className="actions" style={{ marginTop: 24 }}>
-                  <Link href={`/game/${game.id}`} className="btn">
+                  <Link href={`/games/${game.id}`} className="btn">
                     VER LEADERBOARD
                   </Link>
                   <button
