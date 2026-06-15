@@ -156,7 +156,7 @@ export default function PlayerPage({
                   </Link>
                   <button
                     className="btn ghost"
-                    onClick={() => router.push("/library")}
+                    onClick={() => router.push("/games")}
                   >
                     SALIR
                   </button>

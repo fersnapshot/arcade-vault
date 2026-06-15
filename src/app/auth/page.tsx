@@ -18,12 +18,11 @@ export default function AuthPage() {
     e.preventDefault();
     const playerName = name.trim() || email.split("@")[0];
     login({ name: playerName });
-    router.push("/library");
+    router.push("/games");
   }
 
   return (
     <div className="av-auth-wrap">
-
       <div className="auth-card fade-in">
         <div className="auth-header">
           <div className="mark" />

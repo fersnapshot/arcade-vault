@@ -81,7 +81,7 @@ export default async function GamePage({
             <Link href={`/player/${game.id}`} className="btn lg pulse">
               ▶ JUGAR AHORA
             </Link>
-            <Link href="/library" className="btn ghost">
+            <Link href="/games" className="btn ghost">
               ← VOLVER
             </Link>
           </div>
