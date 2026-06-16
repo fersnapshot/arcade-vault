@@ -1729,7 +1729,7 @@ a {
 .hero-scroll {
   position: absolute;
   left: 50%;
-  bottom: -20px;
+  bottom: -80px;
   transform: translateX(-50%);
   font-family: var(--pixel);
   font-size: 9px;
