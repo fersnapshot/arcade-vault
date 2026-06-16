@@ -25,74 +25,79 @@ function HighlightIcon({ kind }: { kind: "HEART" | "BROWSER" | "PLANT" }) {
   const C = "currentColor";
   if (kind === "HEART")
     return (
-      <svg className="hl-icon" viewBox="0 0 24 22" aria-hidden="true">
+      <svg className="hl-icon" viewBox="0 0 16 16" aria-hidden="true">
         <g fill={C}>
-          <rect x="2" y="2" width="6" height="2" />
-          <rect x="16" y="2" width="6" height="2" />
-          <rect x="0" y="4" width="10" height="4" />
-          <rect x="14" y="4" width="10" height="4" />
-          <rect x="0" y="8" width="24" height="4" />
-          <rect x="2" y="12" width="20" height="2" />
-          <rect x="4" y="14" width="16" height="2" />
-          <rect x="6" y="16" width="12" height="2" />
-          <rect x="8" y="18" width="8" height="2" />
-          <rect x="10" y="20" width="4" height="2" />
+          <rect x="2" y="3" width="4" height="2" />
+          <rect x="10" y="3" width="4" height="2" />
+          <rect x="1" y="4" width="2" height="4" />
+          <rect x="13" y="4" width="2" height="4" />
+          <rect x="2" y="8" width="2" height="2" />
+          <rect x="12" y="8" width="2" height="2" />
+          <rect x="3" y="9" width="10" height="2" />
+          <rect x="4" y="11" width="8" height="2" />
+          <rect x="5" y="12" width="6" height="2" />
+          <rect x="6" y="13" width="4" height="1" />
+          <rect x="7" y="14" width="2" height="1" />
         </g>
       </svg>
     );
   if (kind === "BROWSER")
     return (
-      <svg className="hl-icon" viewBox="0 0 24 20" aria-hidden="true">
+      <svg className="hl-icon" viewBox="0 0 16 16" aria-hidden="true">
         <g fill={C}>
-          <rect x="0" y="0" width="24" height="4" />
-          <rect x="0" y="4" width="24" height="16" fill="none" stroke={C} strokeWidth="1.5" />
-          <rect x="2" y="1" width="2" height="2" fill="#0a0a0f" />
-          <rect x="5" y="1" width="2" height="2" fill="#0a0a0f" />
-          <rect x="8" y="1" width="2" height="2" fill="#0a0a0f" />
-          <rect x="2" y="7" width="20" height="1" />
-          <rect x="2" y="10" width="14" height="1" />
-          <rect x="2" y="13" width="18" height="1" />
-          <rect x="2" y="16" width="10" height="1" />
+          <rect
+            x="1"
+            y="2"
+            width="14"
+            height="12"
+            fill="none"
+            stroke={C}
+            strokeWidth="1.4"
+          />
+          <rect x="1" y="2" width="14" height="3" />
+          <rect x="3" y="3" width="1" height="1" fill="#0a0a0f" />
+          <rect x="5" y="3" width="1" height="1" fill="#0a0a0f" />
+          <rect x="7" y="3" width="1" height="1" fill="#0a0a0f" />
+          <rect x="3" y="7" width="10" height="1" />
+          <rect x="3" y="9" width="7" height="1" />
+          <rect x="3" y="11" width="9" height="1" />
+          <rect x="3" y="13" width="5" height="1" />
         </g>
       </svg>
     );
   if (kind === "PLANT")
     return (
-      <svg className="hl-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <svg className="hl-icon" viewBox="0 0 16 16" aria-hidden="true">
         <g fill={C}>
-          <rect x="10" y="14" width="4" height="8" />
-          <rect x="8" y="20" width="8" height="2" />
-          <rect x="8" y="8" width="8" height="6" />
-          <rect x="6" y="10" width="2" height="4" />
-          <rect x="16" y="10" width="2" height="4" />
-          <rect x="10" y="4" width="4" height="4" />
-          <rect x="8" y="6" width="2" height="2" />
-          <rect x="14" y="6" width="2" height="2" />
-          <rect x="4" y="12" width="2" height="4" />
-          <rect x="18" y="12" width="2" height="4" />
+          <rect x="7" y="9" width="2" height="5" />
+          <rect x="5" y="13" width="6" height="1" />
+          <rect x="5" y="5" width="6" height="4" />
+          <rect x="3" y="7" width="2" height="3" />
+          <rect x="11" y="7" width="2" height="3" />
+          <rect x="7" y="2" width="2" height="3" />
+          <rect x="5" y="4" width="2" height="1" />
+          <rect x="9" y="4" width="2" height="1" />
+          <rect x="2" y="8" width="1" height="3" />
+          <rect x="13" y="8" width="1" height="3" />
         </g>
       </svg>
     );
   return null;
 }
 
-const HIGHLIGHTS = [
+const HIGHLIGHTS: {
+  kind: "HEART" | "BROWSER" | "PLANT";
+  color: string;
+  text: string;
+}[] = [
+  { kind: "HEART", color: "magenta", text: "HECHO CON ❤️ PARA JUGADORES" },
   {
-    kind: "HEART" as const,
-    label: "HECHO CON PASIÓN",
-    desc: "Arcade Vault nació del amor por los juegos clásicos. Cada píxel está puesto con cuidado por personas que crecieron jugando en arcades.",
+    kind: "BROWSER",
+    color: "cyan",
+    text: "JUEGOS EN HTML — CORREN EN CUALQUIER NAVEGADOR",
   },
-  {
-    kind: "BROWSER" as const,
-    label: "DIRECTO AL BROWSER",
-    desc: "Sin instalaciones, sin plugins, sin esperas. Abre el navegador, elige tu juego y empieza a jugar en segundos desde cualquier dispositivo.",
-  },
-  {
-    kind: "PLANT" as const,
-    label: "SIEMPRE CRECIENDO",
-    desc: "La biblioteca crece cada mes. Escuchamos a la comunidad para priorizar los juegos que más quieren ver en la plataforma.",
-  },
-] as const;
+  { kind: "PLANT", color: "green", text: "PROYECTO EN CONSTANTE CRECIMIENTO" },
+];
 
 const PIXELS = Array.from({ length: 24 });
 
@@ -126,7 +131,7 @@ export default function AboutPage() {
       });
       const data = await res.json();
       if (data.ok) {
-        setSent(form.name);
+        setSent(form.name.trim());
       } else {
         setError(data.error ?? "Error desconocido.");
       }
@@ -138,42 +143,42 @@ export default function AboutPage() {
   }
 
   function handleReset() {
-    setForm({ name: "", email: "", msg: "" });
     setSent(null);
-    setError(null);
+    setForm({ name: "", email: "", msg: "" });
   }
 
   return (
     <div className="about fade-in">
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="about-hero">
-        <div className="hero-eyebrow pixel neon-cyan" style={{ marginBottom: 20 }}>
-          ▸ ACERCA DE
-        </div>
-        <h1 className="about-title">ARCADE VAULT</h1>
+        <div className="kicker pixel neon-yellow">▸ ACERCA DE</div>
+        <h1 className="about-title">ACERCA DE ARCADE VAULT</h1>
         <p className="about-mission">
-          Somos un proyecto independiente dedicado a preservar y celebrar los
-          videojuegos clásicos. Nuestra misión es simple: llevar la magia de
-          los arcades a cualquier navegador, de forma gratuita, sin barreras y
-          con el respeto que estos juegos se merecen.
+          ARCADE VAULT nació del amor por los videojuegos clásicos. Nuestra
+          misión es preservar y celebrar los arcades que definieron una
+          generación, haciéndolos accesibles para todos, en cualquier lugar y
+          sin costo.
         </p>
-        <div className="highlight-row reveal">
-          {HIGHLIGHTS.map((h) => (
-            <div key={h.kind} className="highlight">
+        <div className="highlight-row">
+          {HIGHLIGHTS.map((h, i) => (
+            <div
+              key={h.kind}
+              className={`highlight ${h.color}`}
+              style={{ transitionDelay: `${i * 80}ms` }}
+            >
               <HighlightIcon kind={h.kind} />
-              <div className="hl-label pixel">{h.label}</div>
-              <div className="hl-desc">{h.desc}</div>
+              <div className="hl-text pixel">{h.text}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── DIVIDER ──────────────────────────────────────────────────────── */}
-      <div className="about-divider" aria-hidden="true">
+      <div className="about-divider reveal" aria-hidden="true">
         <div className="div-bar" />
         <div className="div-pixels">
           {PIXELS.map((_, i) => (
-            <span key={i} style={{ animationDelay: `${i * 0.06}s` }} />
+            <span key={i} style={{ animationDelay: `${i * 80}ms` }} />
           ))}
         </div>
         <div className="div-bar" />
@@ -184,86 +189,61 @@ export default function AboutPage() {
         <div className="contact-grid">
           {/* Intro */}
           <div className="contact-intro">
-            <h2 className="contact-title pixel">ESCRÍBENOS</h2>
+            <div className="kicker pixel neon-cyan">▸ CONTACTO</div>
+            <h2 className="contact-title">CONTÁCTANOS</h2>
             <p className="contact-sub">
-              ¿Tienes una idea, un bug que reportar o simplemente quieres
-              saludar? Nos encanta leer los mensajes de la comunidad.
-              Respondemos a todo, aunque a veces tardemos un poco.
+              ¿Tienes alguna sugerencia, quieres proponer un juego, o
+              simplemente quieres saludar? Escríbenos.
             </p>
             <div className="contact-tips">
               <div className="tip">
                 <span className="tip-led" />
-                Sugerencias de nuevos juegos
+                RESPUESTA EN 24-48H
               </div>
               <div className="tip">
-                <span className="tip-led" />
-                Reportes de bugs o errores
+                <span className="tip-led y" />
+                SUGERENCIAS BIENVENIDAS
               </div>
               <div className="tip">
-                <span className="tip-led" />
-                Colaboraciones y propuestas
+                <span className="tip-led m" />
+                SIN SPAM, JAMÁS
               </div>
             </div>
           </div>
 
           {/* Form / Terminal */}
-          <div>
-            {sent ? (
-              <div className="terminal-success">
-                <div className="term-bar">
-                  <span className="dot" />
-                  <span className="dot" style={{ background: "var(--yellow)", boxShadow: "0 0 6px var(--yellow)" }} />
-                  <span className="dot" style={{ background: "var(--magenta)", boxShadow: "0 0 6px var(--magenta)" }} />
-                </div>
-                <div className="term-body">
-                  <div className="term-title">✔ MENSAJE ENVIADO</div>
-                  <div className="line">
-                    <span className="prompt">$</span> contact --from &quot;{sent.toUpperCase()}&quot;
-                  </div>
-                  <div className="line" style={{ color: "var(--green)" }}>
-                    STATUS: 200 OK — Tu mensaje ha llegado. ¡Gracias!
-                  </div>
-                  <div className="line">
-                    <span className="caret" />
-                  </div>
-                  <button
-                    className="btn"
-                    style={{ marginTop: 12 }}
-                    onClick={handleReset}
-                  >
-                    ENVIAR OTRO MENSAJE
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form
-                className={`contact-form${shake ? " shake" : ""}`}
-                onSubmit={handleSubmit}
-                noValidate
-              >
+          <form
+            className={`contact-form${shake ? " shake" : ""}`}
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            {!sent ? (
+              <>
                 <div className="field">
                   <label>NOMBRE</label>
                   <input
                     type="text"
-                    placeholder="Tu nombre"
+                    placeholder="px_kai"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
                 </div>
                 <div className="field">
-                  <label>EMAIL</label>
+                  <label>CORREO ELECTRÓNICO</label>
                   <input
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder="jugador@vault.gg"
                     value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
                   />
                 </div>
                 <div className="field">
                   <label>MENSAJE</label>
                   <textarea
                     rows={5}
-                    placeholder="Cuéntanos..."
+                    placeholder="Cuéntanos qué tienes en mente…"
                     value={form.msg}
                     onChange={(e) => setForm({ ...form, msg: e.target.value })}
                   />
@@ -275,9 +255,9 @@ export default function AboutPage() {
                 )}
                 <button
                   type="submit"
-                  className="btn magenta lg"
+                  className="btn xl"
                   disabled={loading}
-                  style={{ display: "flex" }}
+                  style={{ width: "100%" }}
                 >
                   {loading ? (
                     <>
@@ -285,12 +265,43 @@ export default function AboutPage() {
                       ENVIANDO…
                     </>
                   ) : (
-                    "ENVIAR MENSAJE →"
+                    "▶  ENVIAR MENSAJE"
                   )}
                 </button>
-              </form>
+              </>
+            ) : (
+              <div className="terminal-success">
+                <div className="term-bar">
+                  <span className="dot r" />
+                  <span className="dot y" />
+                  <span className="dot g" />
+                  <span className="term-title">VAULT-OS // TERMINAL</span>
+                </div>
+                <div className="term-body">
+                  <div className="line">
+                    <span className="prompt">vault@arcade:~$</span>
+                    ./send_message --to=team
+                  </div>
+                  <div className="line dim">[OK] Conectando con servidor…</div>
+                  <div className="line dim">[OK] Validando contenido…</div>
+                  <div className="line dim">[OK] Transmitiendo paquete…</div>
+                  <div className="line success">
+                    &gt; MENSAJE RECIBIDO. TE RESPONDEREMOS PRONTO. GRACIAS,{" "}
+                    {sent.toUpperCase()}.<span className="caret">_</span>
+                  </div>
+                  <div style={{ marginTop: 18 }}>
+                    <button
+                      type="button"
+                      className="btn ghost"
+                      onClick={handleReset}
+                    >
+                      ENVIAR OTRO MENSAJE
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
-          </div>
+          </form>
         </div>
       </section>
     </div>
