@@ -9,7 +9,7 @@ const LINKS = [
   { href: "/", label: "Inicio" },
   { href: "/games", label: "Biblioteca" },
   { href: "/hall-of-fame", label: "Salón de la Fama" },
-  { href: "/about", label: "Acerca de", disabled: true },
+  { href: "/about", label: "Acerca de", disabled: false },
 ];
 
 export default function Nav() {
