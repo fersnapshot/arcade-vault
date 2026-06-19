@@ -20,9 +20,13 @@ export default function GameCard({ game }: { game: Game }) {
     const r = el.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
     const py = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `translateY(-6px) rotateX(${-py * 6}deg) rotateY(${
-      px * 8
-    }deg)`;
+    // el.style.transform = `translateY(-6px) rotateX(${-py * 6}deg) rotateY(${
+    //   px * 8
+    // }deg)`;
+
+    el.style.transform = `perspective(600px) rotateY(${px * 12}deg) rotateX(${
+      -py * 10
+    }deg) translateY(-4px)`;
   }
 
   function handleMouseLeave() {
