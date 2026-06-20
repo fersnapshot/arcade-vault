@@ -1,6 +1,6 @@
 # SPEC 04 — Integración base de Supabase
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 03-about-page-contact
 - **Date:** 2026-06-19
 - **Objective:** Instalar y configurar el cliente de Supabase (browser + server) en el proyecto Next.js como fundación para features futuras de auth y base de datos.
@@ -87,13 +87,13 @@
 
 ## Acceptance criteria
 
-- [ ] `@supabase/supabase-js` y `@supabase/ssr` aparecen en `package.json`.
-- [ ] `.env.local` contiene `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con valores reales.
-- [ ] El template de entorno contiene las mismas claves con valor vacío.
-- [ ] `src/lib/supabase/client.ts` exporta `createClient` sin errores de TypeScript.
-- [ ] `src/lib/supabase/server.ts` exporta `createClient` sin errores de TypeScript.
-- [ ] `npm run build` completa sin errores.
-- [ ] `.env.local` no está commiteado al repositorio.
+- [x] `@supabase/supabase-js` y `@supabase/ssr` aparecen en `package.json`.
+- [x] `.env.local` contiene `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con valores reales.
+- [x] El template de entorno contiene las mismas claves con valor vacío.
+- [x] `src/lib/supabase/client.ts` exporta `createClient` sin errores de TypeScript.
+- [x] `src/lib/supabase/server.ts` exporta `createClient` sin errores de TypeScript.
+- [x] `npm run build` completa sin errores.
+- [x] `.env.local` no está commiteado al repositorio.
 
 ---
 
