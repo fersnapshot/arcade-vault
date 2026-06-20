@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import AsteroidsGame, {
   type AsteroidsRef,
 } from "@/components/games/AsteroidsGame";
+import { saveScore } from "./actions";
 
 type GameState = "playing" | "paused" | "over";
 
@@ -18,14 +19,28 @@ export default function AsteroidsPage() {
   const [level, setLevel] = useState(1);
   const [gameState, setGameState] = useState<GameState>("playing");
   const [finalScore, setFinalScore] = useState(0);
+  const [playerName, setPlayerName] = useState("");
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
   function handlePauseClick() {
     gameRef.current?.togglePause();
   }
 
+  async function handleSave() {
+    if (!playerName.trim() || saving || saved) return;
+    setSaving(true);
+    try {
+      await saveScore(playerName.trim().toUpperCase(), finalScore);
+      setSaved(true);
+    } finally {
+      setSaving(false);
+    }
+  }
+
   function handleRestart() {
     setSaved(false);
+    setPlayerName("");
     setScore(0);
     setLives(3);
     setLevel(1);
@@ -129,12 +144,18 @@ export default function AsteroidsPage() {
                     type="text"
                     placeholder="TU NOMBRE (3 LETRAS)"
                     maxLength={3}
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
                     style={{ textTransform: "uppercase" }}
                   />
                 </div>
                 <div className="actions">
-                  <button className="btn pulse" onClick={() => setSaved(true)}>
-                    GUARDAR
+                  <button
+                    className="btn pulse"
+                    onClick={handleSave}
+                    disabled={saving || !playerName.trim()}
+                  >
+                    {saving ? "GUARDANDO…" : "GUARDAR"}
                   </button>
                   <Link href="/games/asteroids" className="btn ghost">
                     VER FICHA
