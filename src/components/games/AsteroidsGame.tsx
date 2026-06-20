@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useImperativeHandle, useRef, type Ref } from "react";
+import { useEffect, useLayoutEffect, useImperativeHandle, useRef, type Ref } from "react";
 
 const W = 800;
 const H = 600;
@@ -334,7 +334,10 @@ export default function AsteroidsGame({
   const shouldRestartRef = useRef(false);
   const pausedRef = useRef(false);
   const cbRef = useRef({ onScore, onLives, onLevel, onGameOver, onPause });
-  cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause };
+  
+  useLayoutEffect(() => {
+    cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause };
+  });
 
   useImperativeHandle(ref, () => ({
     restart() {

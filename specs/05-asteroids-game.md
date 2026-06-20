@@ -1,6 +1,6 @@
 # SPEC 05 — Juego Asteroids integrado en la plataforma
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 01-mvp-visual (estructura de rutas y componentes del player)
 - **Date:** 2026-06-20
 - **Objective:** Integrar el juego Asteroids como primera partida jugable real en la plataforma, accesible desde `/player/asteroids`, con el canvas escalado dentro del `crt-screen` y comunicación en tiempo real entre la lógica del juego y el HUD de React.
@@ -98,18 +98,18 @@ usa la interfaz `Game` existente:
 
 ## Acceptance criteria
 
-- [ ] `/games` muestra la card de ASTEROIDS en el catálogo.
-- [ ] `/games/asteroids` carga la ficha del juego sin errores.
-- [ ] `/player/asteroids` carga sin errores de TypeScript ni warnings en consola.
-- [ ] El canvas ocupa el `crt-screen` sin scroll horizontal en desktop y tablet.
-- [ ] El juego arranca automáticamente al entrar en `/player/asteroids`.
-- [ ] Los controles de teclado (←→ rotar, ↑ propulsar, Espacio disparar) funcionan.
-- [ ] El HUD de React muestra score, vidas y nivel actualizados en tiempo real.
-- [ ] El power-up de disparo triple funciona y su contador se refleja en el canvas.
-- [ ] Al perder todas las vidas aparece el modal de game over con la puntuación final.
-- [ ] El botón "JUGAR DE NUEVO" en el modal reinicia el juego sin recargar la página.
-- [ ] El botón pausa detiene el game loop y muestra el overlay; reanudar lo reactiva.
-- [ ] `npm run build` completa sin errores.
+- [x] `/games` muestra la card de ASTEROIDS en el catálogo.
+- [x] `/games/asteroids` carga la ficha del juego sin errores.
+- [x] `/player/asteroids` carga sin errores de TypeScript ni warnings en consola.
+- [x] El canvas ocupa el `crt-screen` sin scroll horizontal en desktop y tablet.
+- [x] El juego arranca automáticamente al entrar en `/player/asteroids`.
+- [x] Los controles de teclado (←→ rotar, ↑ propulsar, Espacio disparar) funcionan.
+- [x] El HUD de React muestra score, vidas y nivel actualizados en tiempo real.
+- [x] El power-up de disparo triple funciona y su contador se refleja en el canvas.
+- [x] Al perder todas las vidas aparece el modal de game over con la puntuación final.
+- [x] El botón "JUGAR DE NUEVO" en el modal reinicia el juego sin recargar la página.
+- [x] El botón pausa detiene el game loop y muestra el overlay; reanudar lo reactiva.
+- [x] `npm run build` completa sin errores.
 
 ---
 
