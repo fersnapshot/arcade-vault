@@ -67,6 +67,17 @@ export const GAMES: Game[] = [
     plays: "3.2M",
   },
   {
+    id: "asteroids",
+    title: "ASTEROIDS",
+    short: "Destroy the rocks. Survive the void.",
+    long: "Campo de asteroides toroidal: los grandes se parten en medianos, los medianos en pequeños. Power-up de disparo triple. ¿Cuántos niveles aguantas?",
+    cat: "SHOOTER",
+    cover: "cover-rocas",
+    color: "cyan",
+    best: 0,
+    plays: "0",
+  },
+  {
     id: "plasma-cannon",
     title: "PLASMA CANNON",
     short: "Side-scrolling hellfire.",
