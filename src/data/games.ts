@@ -1,4 +1,6 @@
-export interface Game {
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+interface Game {
   id: string;
   title: string;
   short: string;
@@ -10,7 +12,7 @@ export interface Game {
   plays: string;
 }
 
-export const GAMES: Game[] = [
+const GAMES: Game[] = [
   {
     id: "brick-basher",
     title: "BRICK BASHER",
@@ -112,5 +114,5 @@ export const GAMES: Game[] = [
   },
 ];
 
-export const CATS = ["TODOS", "ARCADE", "PUZZLE", "SHOOTER", "VERSUS"] as const;
-export type Cat = (typeof CATS)[number];
+const CATS = ["TODOS", "ARCADE", "PUZZLE", "SHOOTER", "VERSUS"] as const;
+type Cat = (typeof CATS)[number];

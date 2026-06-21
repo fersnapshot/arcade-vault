@@ -1,4 +1,6 @@
-export interface ScoreRow {
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+interface ScoreRow {
   rank: number;
   name: string;
   score: number;
@@ -55,7 +57,7 @@ function seededRandom(seed: number) {
   };
 }
 
-export function seededScores(seed: number, count = 10): ScoreRow[] {
+function seededScores(seed: number, count = 10): ScoreRow[] {
   const rand = seededRandom(seed);
   const baseScore = 50000 + Math.floor(rand() * 900000);
 
