@@ -1,6 +1,6 @@
 # SPEC 06 — Base de datos de juegos, scores y leaderboard
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 04-supabase-integration, 05-asteroids-game
 - **Date:** 2026-06-20
 - **Objective:** Crear las tablas `games` y `scores` en Supabase, migrar sólo el juego Asteroids, guardar scores reales desde Asteroids y cablear el leaderboard en `/hall-of-fame` y `/games/asteroids` con datos reales.
@@ -107,17 +107,17 @@ insertScore(data: InsertScore): Promise<void>
 
 ## Acceptance criteria
 
-- [ ] Las tablas `games` y `scores` existen en Supabase con el schema definido.
-- [ ] El juego Asteroids está insertado en la tabla `games` (único seed inicial).
-- [ ] `getGames()` devuelve los juegos desde Supabase sin errores de TypeScript.
-- [ ] `getTopScores("asteroids", 10)` devuelve los scores correctos ordenados desc.
-- [ ] `getTopScoresByGame()` devuelve scores agrupados por juego.
-- [ ] `/hall-of-fame` muestra scores reales agrupados por juego (no datos stub).
-- [ ] `/games/asteroids` muestra el top 10 de scores reales de Asteroids.
-- [ ] El botón "GUARDAR" en el modal de game over inserta el score en Supabase.
-- [ ] Tras guardar, el botón se deshabilita y muestra confirmación.
-- [ ] `user_id` se guarda como `null` en todos los inserts.
-- [ ] `npm run build` completa sin errores.
+- [x] Las tablas `games` y `scores` existen en Supabase con el schema definido.
+- [x] El juego Asteroids está insertado en la tabla `games` (único seed inicial).
+- [x] `getGames()` devuelve los juegos desde Supabase sin errores de TypeScript.
+- [x] `getTopScores("asteroids", 10)` devuelve los scores correctos ordenados desc.
+- [x] `getTopScoresByGame()` devuelve scores agrupados por juego.
+- [x] `/hall-of-fame` muestra scores reales agrupados por juego (no datos stub).
+- [x] `/games/asteroids` muestra el top 10 de scores reales de Asteroids.
+- [x] El botón "GUARDAR" en el modal de game over inserta el score en Supabase.
+- [x] Tras guardar, el botón se deshabilita y muestra confirmación.
+- [x] `user_id` se guarda como `null` en todos los inserts.
+- [x] `npm run build` completa sin errores.
 
 ---
 
