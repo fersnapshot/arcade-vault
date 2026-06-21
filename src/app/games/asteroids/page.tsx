@@ -1,13 +1,15 @@
 import Link from "next/link";
-import { GAMES } from "@/data/games";
-import { getTopScores } from "@/lib/supabase/queries";
+import { notFound } from "next/navigation";
+import { getGame, getTopScores } from "@/lib/supabase/queries";
 
 const RANK_CLASS = ["top1", "top2", "top3"];
 
-const game = GAMES.find((g) => g.id === "asteroids")!;
-
 export default async function AsteroidsDetailPage() {
-  const scores = await getTopScores("asteroids", 10);
+  const [game, scores] = await Promise.all([
+    getGame("asteroids"),
+    getTopScores("asteroids", 10),
+  ]);
+  if (!game) notFound();
   const bestScore = scores.length > 0 ? scores[0].score : 0;
   const plays = scores.length.toString();
 

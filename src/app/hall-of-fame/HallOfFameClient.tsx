@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GAMES } from "@/data/games";
-import type { Score } from "@/lib/supabase/types";
+import type { Game, Score } from "@/lib/supabase/types";
 
 const PODIUM_CLASS = ["gold", "silver", "bronze"];
 const PODIUM_LABEL = ["#1", "#2", "#3"];
@@ -17,11 +16,12 @@ function formatDate(iso: string) {
 }
 
 interface Props {
+  games: Game[];
   scoresByGame: Record<string, Score[]>;
 }
 
-export default function HallOfFameClient({ scoresByGame }: Props) {
-  const [activeId, setActiveId] = useState(GAMES[0].id);
+export default function HallOfFameClient({ games, scoresByGame }: Props) {
+  const [activeId, setActiveId] = useState(games[0]?.id ?? "");
   const scores = scoresByGame[activeId] ?? [];
   const podium = [scores[1], scores[0], scores[2]];
 
@@ -33,7 +33,7 @@ export default function HallOfFameClient({ scoresByGame }: Props) {
       </div>
 
       <div className="hall-tabs">
-        {GAMES.map((g) => (
+        {games.map((g) => (
           <button
             key={g.id}
             className={`chip${activeId === g.id ? " active" : ""}`}
