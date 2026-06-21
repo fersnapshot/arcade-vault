@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { seededScores } from "@/data/scores";
 import type { Game } from "@/lib/supabase/types";
 
 // ── Reveal hook ──────────────────────────────────────────────────────────────
@@ -242,14 +241,6 @@ const STATS = [
   { n: "GLOBAL", u: "RANKING", s: "COMPITE CON EL MUNDO" },
 ] as const;
 
-const RELATIVE_TIMES = [
-  "hace 2 min",
-  "hace 5 min",
-  "hace 8 min",
-  "hace 12 min",
-  "hace 18 min",
-  "hace 24 min",
-];
 const NEON_COLORS = [
   "cyan",
   "yellow",
@@ -260,20 +251,27 @@ const NEON_COLORS = [
 ] as const;
 
 // ── Main component ────────────────────────────────────────────────────────────
-interface Props {
-  games: Game[];
+interface TopPlayer {
+  rank: number;
+  name: string;
+  score: number;
 }
 
-export default function HomeClient({ games }: Props) {
-  useReveal();
+interface RecentScore {
+  name: string;
+  game: string;
+  score: number;
+  time: string;
+}
 
-  const topPlayers = seededScores(1, 5);
-  const recentScores = games.map((g, i) => ({
-    ...seededScores(i + 2, 1)[0],
-    game: g.title,
-    time: RELATIVE_TIMES[i],
-    color: NEON_COLORS[i],
-  }));
+interface Props {
+  games: Game[];
+  topPlayers: TopPlayer[];
+  recentScores: RecentScore[];
+}
+
+export default function HomeClient({ games, topPlayers, recentScores }: Props) {
+  useReveal();
 
   return (
     <div className="home fade-in">
@@ -395,7 +393,11 @@ export default function HomeClient({ games }: Props) {
                   className="tick-row"
                   style={{ animationDelay: `${i * 60}ms` }}
                 >
-                  <span className={`tk-p neon-${r.color}`}>{r.name}</span>
+                  <span
+                    className={`tk-p neon-${NEON_COLORS[i % NEON_COLORS.length]}`}
+                  >
+                    {r.name}
+                  </span>
                   <span className="tk-mid">▸ {r.game}</span>
                   <span className="tk-s">
                     +{r.score.toLocaleString("es-ES")}

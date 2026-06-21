@@ -62,6 +62,28 @@ export async function getGamesWithBest(): Promise<GameWithBest[]> {
   }));
 }
 
+export async function getGlobalTopScores(limit = 5): Promise<Score[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("scores")
+    .select("*")
+    .order("score", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function getRecentScores(limit = 6): Promise<Score[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("scores")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function insertScore(data: InsertScore): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
