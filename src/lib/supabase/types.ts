@@ -18,6 +18,10 @@ export interface Score {
   created_at: string;
 }
 
+export interface GameWithBest extends Game {
+  best: number;
+}
+
 export interface InsertScore {
   game_id: string;
   score: number;

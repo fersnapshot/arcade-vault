@@ -1,5 +1,5 @@
 import { createClient } from "./server";
-import { Game, Score, InsertScore } from "./types";
+import { Game, GameWithBest, Score, InsertScore } from "./types";
 
 export async function getGames(): Promise<Game[]> {
   const supabase = await createClient();
@@ -38,6 +38,28 @@ export async function getTopScoresByGame(
   );
 
   return Object.fromEntries(entries);
+}
+
+export async function getGame(id: string): Promise<Game | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("games")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) return null;
+  return data;
+}
+
+export async function getGamesWithBest(): Promise<GameWithBest[]> {
+  const [games, bestByGame] = await Promise.all([
+    getGames(),
+    getTopScoresByGame(1),
+  ]);
+  return games.map((g) => ({
+    ...g,
+    best: bestByGame[g.id]?.[0]?.score ?? 0,
+  }));
 }
 
 export async function insertScore(data: InsertScore): Promise<void> {

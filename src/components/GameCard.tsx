@@ -2,15 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
-import type { Game } from "@/data/games";
+import type { GameWithBest } from "@/lib/supabase/types";
 
-function btnColorClass(color: Game["color"]) {
+function btnColorClass(color: string) {
   if (color === "magenta") return "btn magenta";
   if (color === "yellow") return "btn yellow";
   return "btn";
 }
 
-export default function GameCard({ game }: { game: Game }) {
+export default function GameCard({ game }: { game: GameWithBest }) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
 

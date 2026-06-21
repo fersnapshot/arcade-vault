@@ -1,18 +1,13 @@
-import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getGame, getTopScores } from "@/lib/supabase/queries";
+import { GAMES } from "@/data/games";
+import { getTopScores } from "@/lib/supabase/queries";
 
 const RANK_CLASS = ["top1", "top2", "top3"];
 
-export default async function GamePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const [game, scores] = await Promise.all([getGame(id), getTopScores(id, 10)]);
-  if (!game) notFound();
+const game = GAMES.find((g) => g.id === "asteroids")!;
 
+export default async function AsteroidsDetailPage() {
+  const scores = await getTopScores("asteroids", 10);
   const bestScore = scores.length > 0 ? scores[0].score : 0;
   const plays = scores.length.toString();
 
@@ -78,7 +73,7 @@ export default async function GamePage({
           </div>
 
           <div className="detail-actions">
-            <Link href={`/player/${game.id}`} className="btn lg pulse">
+            <Link href="/player/asteroids" className="btn lg pulse">
               ▶ JUGAR AHORA
             </Link>
             <Link href="/games" className="btn ghost">
