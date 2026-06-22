@@ -7,8 +7,8 @@ import {
   useRef,
   type Ref,
 } from "react";
-import bounceSrc from "./arkanoid/sounds/ball-bounce.mp3";
-import breakSrc from "./arkanoid/sounds/break-sound.mp3";
+const bounceSrc = "/sounds/arkanoid/ball-bounce.mp3";
+const breakSrc = "/sounds/arkanoid/break-sound.mp3";
 import {
   drawFrame,
   drawSprite,
@@ -41,6 +41,7 @@ const BLOCKS_INCREMENT = 10;
 export interface ArkanoidRef {
   restart: () => void;
   togglePause: () => void;
+  toggleMute: () => void;
 }
 
 interface Props {
@@ -49,6 +50,7 @@ interface Props {
   onLevel: (level: number) => void;
   onGameOver: (finalScore: number) => void;
   onPause: (paused: boolean) => void;
+  onMute: (muted: boolean) => void;
   ref?: Ref<ArkanoidRef>;
 }
 
@@ -113,15 +115,24 @@ export default function ArkanoidGame({
   onLevel,
   onGameOver,
   onPause,
+  onMute,
   ref,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const shouldRestartRef = useRef(false);
   const pausedRef = useRef(false);
-  const cbRef = useRef({ onScore, onLives, onLevel, onGameOver, onPause });
+  const mutedRef = useRef(false);
+  const cbRef = useRef({
+    onScore,
+    onLives,
+    onLevel,
+    onGameOver,
+    onPause,
+    onMute,
+  });
 
   useLayoutEffect(() => {
-    cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause };
+    cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause, onMute };
   });
 
   useImperativeHandle(ref, () => ({
@@ -131,6 +142,10 @@ export default function ArkanoidGame({
     togglePause() {
       pausedRef.current = !pausedRef.current;
       cbRef.current.onPause(pausedRef.current);
+    },
+    toggleMute() {
+      mutedRef.current = !mutedRef.current;
+      cbRef.current.onMute(mutedRef.current);
     },
   }));
 
@@ -145,7 +160,8 @@ export default function ArkanoidGame({
       keys[e.key] = true;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.preventDefault();
       if (e.key === "m" || e.key === "M") {
-        muted = !muted;
+        mutedRef.current = !mutedRef.current;
+        cbRef.current.onMute(mutedRef.current);
       }
       if (e.key === "p" || e.key === "P") {
         if (status === "playing") {
@@ -175,10 +191,9 @@ export default function ArkanoidGame({
 
     let sfxBounce: HTMLAudioElement | null = null;
     let sfxBreak: HTMLAudioElement | null = null;
-    let muted = false;
 
     function playSound(audio: HTMLAudioElement | null) {
-      if (muted || !audio) return;
+      if (mutedRef.current || !audio) return;
       (audio.cloneNode() as HTMLAudioElement).play().catch(() => {});
     }
 

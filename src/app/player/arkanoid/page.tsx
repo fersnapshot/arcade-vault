@@ -22,6 +22,7 @@ export default function ArkanoidPage() {
   const [playerName, setPlayerName] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [muted, setMuted] = useState(false);
 
   function handlePauseClick() {
     gameRef.current?.togglePause();
@@ -72,6 +73,13 @@ export default function ArkanoidPage() {
           >
             {gameState === "paused" ? "▶ REANUDAR" : "⏸ PAUSA"}
           </button>
+          <button
+            className="btn"
+            onClick={() => gameRef.current?.toggleMute()}
+            disabled={gameState === "over"}
+          >
+            {muted ? "M 🔇 SILENCIADO" : "M 🔊 SONIDO"}
+          </button>
           <button className="btn magenta" onClick={() => router.push("/games")}>
             ■ SALIR
           </button>
@@ -87,6 +95,7 @@ export default function ArkanoidPage() {
             onLives={setLives}
             onLevel={setLevel}
             onPause={(p) => setGameState(p ? "paused" : "playing")}
+            onMute={setMuted}
             onGameOver={(s) => {
               setFinalScore(s);
               setGameState("over");
