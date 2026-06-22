@@ -39,12 +39,13 @@ const BLOCKS_BASE = BLOCK_COLS * BLOCK_ROWS_BASE;
 const BLOCKS_INCREMENT = 10;
 
 export interface ArkanoidRef {
-  restart: () => void;
+  restart: (level?: number) => void;
   togglePause: () => void;
   toggleMute: () => void;
 }
 
 interface Props {
+  initialLevel?: number;
   onScore: (score: number) => void;
   onLives: (lives: number) => void;
   onLevel: (level: number) => void;
@@ -110,6 +111,7 @@ function generateBlocks(level: number): Block[] {
 }
 
 export default function ArkanoidGame({
+  initialLevel = 1,
   onScore,
   onLives,
   onLevel,
@@ -119,7 +121,7 @@ export default function ArkanoidGame({
   ref,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const shouldRestartRef = useRef(false);
+  const shouldRestartRef = useRef<number | false>(false);
   const pausedRef = useRef(false);
   const mutedRef = useRef(false);
   const cbRef = useRef({
@@ -136,8 +138,8 @@ export default function ArkanoidGame({
   });
 
   useImperativeHandle(ref, () => ({
-    restart() {
-      shouldRestartRef.current = true;
+    restart(level?: number) {
+      shouldRestartRef.current = level ?? initialLevel;
     },
     togglePause() {
       pausedRef.current = !pausedRef.current;
@@ -206,8 +208,8 @@ export default function ArkanoidGame({
     let blocks: Block[];
     let explosions: Explosion[];
 
-    function initGame() {
-      currentLevel = 1;
+    function initGame(startLevel = initialLevel) {
+      currentLevel = startLevel;
       score = 0;
       lives = 3;
       status = "playing";
@@ -247,9 +249,10 @@ export default function ArkanoidGame({
     }
 
     function update(delta: number) {
-      if (shouldRestartRef.current) {
+      if (shouldRestartRef.current !== false) {
+        const lvl = shouldRestartRef.current;
         shouldRestartRef.current = false;
-        initGame();
+        initGame(lvl);
         return;
       }
 

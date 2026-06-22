@@ -8,21 +8,32 @@ import ArkanoidGame, {
 } from "@/components/games/ArkanoidGame";
 import { saveScore } from "./actions";
 
-type GameState = "playing" | "paused" | "over";
+type GameState = "selecting" | "playing" | "paused" | "over";
+
+const MAX_LEVELS = 10;
 
 export default function ArkanoidPage() {
   const router = useRouter();
   const gameRef = useRef<ArkanoidRef>(null);
 
+  const [gameState, setGameState] = useState<GameState>("selecting");
+  const [selectedLevel, setSelectedLevel] = useState(1);
+
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
-  const [gameState, setGameState] = useState<GameState>("playing");
   const [finalScore, setFinalScore] = useState(0);
   const [playerName, setPlayerName] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [muted, setMuted] = useState(false);
+
+  function handleStart() {
+    setScore(0);
+    setLives(3);
+    setLevel(selectedLevel);
+    setGameState("playing");
+  }
 
   function handlePauseClick() {
     gameRef.current?.togglePause();
@@ -44,9 +55,9 @@ export default function ArkanoidPage() {
     setPlayerName("");
     setScore(0);
     setLives(3);
-    setLevel(1);
+    setLevel(selectedLevel);
     setGameState("playing");
-    gameRef.current?.restart();
+    gameRef.current?.restart(selectedLevel);
   }
 
   return (
@@ -69,14 +80,14 @@ export default function ArkanoidPage() {
           <button
             className="btn"
             onClick={handlePauseClick}
-            disabled={gameState === "over"}
+            disabled={gameState === "over" || gameState === "selecting"}
           >
             {gameState === "paused" ? "▶ REANUDAR" : "⏸ PAUSA"}
           </button>
           <button
             className="btn"
             onClick={() => gameRef.current?.toggleMute()}
-            disabled={gameState === "over"}
+            disabled={gameState === "over" || gameState === "selecting"}
           >
             {muted ? "M 🔇 SILENCIADO" : "M 🔊 SONIDO"}
           </button>
@@ -89,18 +100,89 @@ export default function ArkanoidPage() {
       {/* CRT screen */}
       <div className="crt">
         <div className="crt-screen">
-          <ArkanoidGame
-            ref={gameRef}
-            onScore={setScore}
-            onLives={setLives}
-            onLevel={setLevel}
-            onPause={(p) => setGameState(p ? "paused" : "playing")}
-            onMute={setMuted}
-            onGameOver={(s) => {
-              setFinalScore(s);
-              setGameState("over");
-            }}
-          />
+          {/* Level selector */}
+          {gameState === "selecting" && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 24,
+                background: "#0a0a0f",
+              }}
+            >
+              <p
+                className="pixel"
+                style={{
+                  fontSize: 22,
+                  color: "var(--magenta)",
+                  letterSpacing: 4,
+                }}
+              >
+                ARKANOID
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 12,
+                }}
+              >
+                <span
+                  className="pixel"
+                  style={{ fontSize: 10, color: "rgba(255,255,255,0.5)" }}
+                >
+                  NIVEL INICIAL
+                </span>
+                <select
+                  value={selectedLevel}
+                  onChange={(e) => setSelectedLevel(Number(e.target.value))}
+                  style={{
+                    background: "var(--panel)",
+                    color: "var(--fg)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    borderRadius: 4,
+                    padding: "6px 12px",
+                    fontSize: 16,
+                    fontFamily: "monospace",
+                    textAlign: "center",
+                  }}
+                >
+                  {Array.from({ length: MAX_LEVELS }, (_, i) => i + 1).map(
+                    (n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </div>
+              <button className="btn lg pulse" onClick={handleStart}>
+                ▶ EMPEZAR
+              </button>
+            </div>
+          )}
+
+          {/* Game */}
+          {gameState !== "selecting" && (
+            <ArkanoidGame
+              ref={gameRef}
+              initialLevel={selectedLevel}
+              onScore={setScore}
+              onLives={setLives}
+              onLevel={setLevel}
+              onPause={(p) => setGameState(p ? "paused" : "playing")}
+              onMute={setMuted}
+              onGameOver={(s) => {
+                setFinalScore(s);
+                setGameState("over");
+              }}
+            />
+          )}
 
           {/* Pause overlay */}
           {gameState === "paused" && (
