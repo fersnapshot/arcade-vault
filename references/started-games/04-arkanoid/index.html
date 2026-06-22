@@ -1,18 +1,60 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Arkanoid</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #2d2d2d; display: flex; justify-content: center; align-items: center; height: 100vh; }
-    canvas { display: block; }
-  </style>
-</head>
-<body>
-  <canvas id="game" width="800" height="600"></canvas>
-  <script src="assets/spritesheet.js"></script>
-  <script src="levels.js"></script>
-  <script src="game.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arkanoid</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #2d2d2d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      canvas {
+        display: block;
+      }
+      #canvas-container {
+        position: relative;
+      }
+      #level-select-ui {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 12px 20px;
+        border-radius: 8px;
+      }
+      #level-select {
+        font-size: 16px;
+        padding: 6px 10px;
+      }
+      #level-select-btn {
+        font-size: 16px;
+        padding: 6px 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container">
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      <div id="level-select-ui">
+        <select id="level-select"></select>
+        <button id="level-select-btn">Jugar</button>
+      </div>
+    </div>
+    <script src="assets/spritesheet.js"></script>
+    <script src="game.js"></script>
+  </body>
 </html>

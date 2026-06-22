@@ -2,108 +2,77 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Proyecto
+## Project
 
-Juego de Arkanoid en HTML, CSS y JavaScript puro — sin dependencias, cero frameworks. Se abre directamente en el navegador (`open index.html`).
+Juego de Arkanoid en HTML/CSS/JS puro, sin dependencias. Implementado y funcional.
 
-## Desarrollo
+## Running the game
 
-No hay paso de build ni servidor requerido. Para probar cambios: `open index.html`.
+Abrir `index.html` en un navegador. Usar servidor estático local para evitar restricciones CORS al cargar el spritesheet (e.g. `npx serve .` o la extensión Live Server de VS Code).
 
 ## Arquitectura
 
-### Archivos principales
+- `index.html` — canvas 800×600 + div `#level-select-ui` (select HTML + botón "Jugar") posicionado con CSS absoluto sobre el canvas
+- `game.js` — toda la lógica del juego: estado, game loop, colisiones, niveles, explosiones, sonidos, pausa, selección de nivel
+- `assets/spritesheet.js` — utilidades de sprites (ver abajo)
 
-| Archivo | Rol |
-|---|---|
-| `index.html` | Punto de entrada; carga scripts y el `<canvas>` de 800×600 px |
-| `game.js` | Toda la lógica del juego (estado, loop, físicas, render, HUD, overlays) |
-| `levels.js` | Define `LEVELS`: array de 5 niveles con `blocks[]` y `ballSpeedMultiplier` |
-| `assets/spritesheet.js` | Carga el spritesheet y expone helpers de dibujo |
-
-### Assets
-
-- **`assets/spritesheet-breakout.png`** — spritesheet único con todos los sprites
-- **`assets/sounds/ball-bounce.mp3`** y **`assets/sounds/break-sound.mp3`** — efectos de sonido
-
-### API de `spritesheet.js`
+## Estado del juego (variables principales en `game.js`)
 
 ```js
-loadSpritesheet(cb)                        // carga la imagen; llama cb al terminar
-drawSprite(ctx, name, x, y, w, h)          // dibuja un sprite por nombre
-drawFrame(ctx, frame, x, y, w, h)          // dibuja un frame de animación
-// Constantes exportadas: SPRITES, EXPLOSION_FRAMES, EXPLOSION_DURATION
+state = { lives, score, status }  // status: "playing"|"gameover"|"win"
+paused                             // boolean
+currentLevel                       // 1..10
+selectedLevel                      // sincronizado con <select>
+explosions[]                       // animaciones activas
+muted                              // boolean (tecla M)
 ```
 
-### Sprites disponibles
+## Assets disponibles
 
-| Nombre | Descripción |
-|---|---|
-| `paddle` | Paleta (162×14 px) |
-| `ball` | Pelota (16×16 px) |
-| `block_gray`, `block_red`, `block_yellow`, `block_cyan`, `block_magenta`, `block_hotpink`, `block_green` | Bloques por color |
+- `assets/spritesheet-breakout.png` — spritesheet con todos los sprites
+- `assets/spritesheet.js` — coordenadas de cada sprite; expone `loadSpritesheet(cb)`, `drawSprite(ctx, name, x, y, w, h)`, `drawFrame(ctx, frame, x, y, w, h)`, `SPRITES`, `EXPLOSION_FRAMES`, `EXPLOSION_DURATION`
+- `assets/sounds/ball-bounce.mp3` y `break-sound.mp3`
 
-Las explosiones usan `EXPLOSION_FRAMES[color]` (4 frames) y duran `EXPLOSION_DURATION` ms.
+## Sprites disponibles
 
-### Estado del juego (en `game.js`)
+| Nombre (`drawSprite`)                                                                                    | Descripción                            |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| `paddle`                                                                                                 | Paleta (162×14 px en spritesheet)      |
+| `ball`                                                                                                   | Bola (16×16 px)                        |
+| `block_red`, `block_cyan`, `block_green`, `block_magenta`, `block_yellow`, `block_hotpink`, `block_gray` | Bloques de colores (32×16 px cada uno) |
 
-```js
-gameState   // 'playing' | 'paused' | 'gameover' | 'win'
-score       // number
-lives       // number (inicia en 3)
-currentLevel // número de nivel activo (0-indexed sobre LEVELS)
-paddle      // { x, y, w: 162, h: 14 }
-ball        // { x, y, w: 16, h: 16, vx, vy }
-blocks[]    // [{ x, y, w, h, color, alive }]
-explosions[]// animaciones activas
-```
+Las explosiones se animan con `EXPLOSION_FRAMES[color]` (4 frames × 150 ms = `EXPLOSION_DURATION`).
 
-## Flujo de trabajo spec-driven
+## Specs implementadas
 
-Este proyecto usa desarrollo guiado por specs. **No escribir código sin spec aprobada.**
+| # | Archivo | Estado | Descripción |
+|---|---------|--------|-------------|
+| 01 | `specs/01-arkanoid-mvp.md` | Implementado | MVP: paleta, bola, 60 bloques, score, vidas, overlays |
+| 02 | `specs/02-explosion-animation.md` | Implementado | Animación de explosión al romper bloques |
+| 03 | `specs/03-sounds.md` | Implementado | Sonidos de rebote y ruptura, tecla M para silenciar |
+| 04 | `specs/04-levels.md` | Implementado | 10 niveles con layouts aleatorios y velocidad incremental |
+| 05 | `specs/05-pause-level-select.md` | Implementado | Pausa con `P`, selección de nivel desde overlay |
+| 06 | `specs/06-select-nivel.md` | Implemented | `<select>` HTML para seleccionar nivel (reemplaza lista canvas) |
 
-### Comandos
+## Workflow spec-driven
 
-| Comando | Acción |
-|---|---|
-| `/spec [descripción]` | Diseña una spec nueva haciendo preguntas primero. Guarda en `specs/NN-slug.md` con estado `Draft`. |
-| `/spec-impl NN-slug` | Implementa la spec aprobada paso a paso, creando rama `spec-NN-slug` y pausando tras cada paso. |
+Este proyecto usa un flujo spec-driven con dos skills:
 
-### Ciclo de vida de una spec
+- `/spec <descripción>` — diseña una nueva spec sección a sección antes de escribir código
+- `/spec-impl <NN-nombre>` — implementa una spec aprobada paso a paso (requiere `Estado: Aprobado`)
 
-```
-Draft → Approved → Implementado
-               ↘ Obsoleto
-```
+Las specs viven en `specs/NN-slug.md`. Estados válidos: `Draft` → `Aprobado` → `Implemented`.
 
-El estado se cambia **manualmente** antes de ejecutar `/spec-impl`. Nunca implementar una spec en estado `Draft`.
+## Controles del juego
 
-### Estructura de una spec (`specs/NN-slug.md`)
+| Tecla | Acción |
+|-------|--------|
+| ←→ / ratón | Mover paleta |
+| P | Pausar / reanudar |
+| M | Silenciar / activar sonido |
 
-```markdown
-# NN — Título breve
+## Convenciones
 
-- **Estado:** Draft | Approved | Implementado | Obsoleto
-- **Fecha:** YYYY-MM-DD
-- **Dependencias:** specs previas requeridas
-- **Objetivo:** una sola frase
-
-## Alcance
-## Modelo de datos
-## Plan de implementación   ← pasos numerados, cada uno commiteable
-## Criterios de aceptación  ← checklist booleano
-## Decisiones               ← qué se consideró y por qué
-## Qué NO incluye este spec
-```
-
-La referencia completa está en `.agents/skills/spec/template.md`.
-
-### Specs existentes
-
-| # | Slug | Estado |
-|---|---|---|
-| 01 | `mvp-arkanoid` | Implementado |
-| 02 | `animacion-explosion-bloques` | Implementado |
-| 03 | `sonidos-y-niveles` | Implementado |
-
-El próximo spec será `04-...`.
+- Vanilla JS, sin frameworks ni bundlers.
+- Canvas 2D para rendering.
+- El juego corre completamente en el navegador sin backend.
