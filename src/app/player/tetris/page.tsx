@@ -84,6 +84,10 @@ export default function TetrisPage() {
           <span className="l">SCORE</span>
           <span className="v">{score.toLocaleString()}</span>
         </div>
+        <div className="hud-stat lives">
+          <span className="l">VIDAS</span>
+          <span className="v">♥</span>
+        </div>
         <div className="hud-stat">
           <span className="l">LÍNEAS</span>
           <span className="v">{lines}</span>
