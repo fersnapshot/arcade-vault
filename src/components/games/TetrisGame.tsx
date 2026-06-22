@@ -131,6 +131,7 @@ export interface TetrisRef {
 }
 
 interface Props {
+  initialLevel?: number;
   skin?: SkinId;
   onScore: (score: number) => void;
   onLines: (lines: number) => void;
@@ -141,6 +142,7 @@ interface Props {
 }
 
 export default function TetrisGame({
+  initialLevel = 1,
   skin = "retro",
   onScore,
   onLines,
@@ -155,6 +157,7 @@ export default function TetrisGame({
   const pausedRef = useRef(false);
   const cbRef = useRef({ onScore, onLines, onLevel, onGameOver, onPause });
   const skinRef = useRef<SkinId>(skin);
+  const initialLevelRef = useRef(initialLevel);
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLines, onLevel, onGameOver, onPause };
@@ -585,7 +588,7 @@ export default function TetrisGame({
     }
 
     lastTime = performance.now();
-    initGame();
+    initGame(initialLevelRef.current);
     rafId = requestAnimationFrame(loop);
 
     return () => {
@@ -595,14 +598,44 @@ export default function TetrisGame({
   }, []);
 
   return (
-    <>
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <canvas
         ref={canvasRef}
         width={300}
         height={600}
         style={{ width: "100%", height: "100%", objectFit: "contain" }}
       />
-      <canvas ref={nextCanvasRef} width={120} height={120} />
-    </>
+      <div
+        style={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+          background: "rgba(8,8,20,0.85)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 4,
+          padding: 4,
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            marginBottom: 2,
+            fontSize: 7,
+            letterSpacing: 1,
+            color: "rgba(255,255,255,0.4)",
+            textAlign: "center",
+            fontFamily: "monospace",
+          }}
+        >
+          NEXT
+        </p>
+        <canvas
+          ref={nextCanvasRef}
+          width={120}
+          height={120}
+          style={{ display: "block", width: 60, height: 60 }}
+        />
+      </div>
+    </div>
   );
 }
