@@ -1,6 +1,6 @@
 # SPEC 07 — Integración de Tetris como juego jugable
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 05-asteroids-game, 06-games-db-and-leaderboard
 - **Date:** 2026-06-22
 - **Objective:** Integrar TETRIS como juego jugable en Arcade Vault, accesible
@@ -109,24 +109,24 @@ user_id: null })`. Referencia: `src/app/player/asteroids/actions.ts`.
 
 ## Acceptance criteria
 
-- [ ] `/games` muestra la card de TETRIS en el catálogo.
-- [ ] `/games/tetris` carga la ficha propia del juego sin errores.
-- [ ] `/games/tetris` muestra el top 10 de scores reales de TETRIS.
-- [ ] `/player/tetris` muestra el selector de nivel inicial (1–10) antes de empezar.
-- [ ] `/player/tetris` carga sin errores de TypeScript ni warnings en consola.
-- [ ] El canvas ocupa el `crt-screen` sin scroll horizontal en desktop y tablet.
-- [ ] El juego arranca al confirmar el nivel inicial.
-- [ ] Controles de teclado: ← → mueven la pieza, ↓ soft drop, ↑ / X rotan, Space hard drop, P / Escape pausa.
-- [ ] El canvas secundario muestra la siguiente pieza en tiempo real.
-- [ ] El HUD de React muestra score, líneas y nivel actualizados en tiempo real.
-- [ ] El selector de skin cambia el estilo visual del canvas sin reiniciar la partida.
-- [ ] La preferencia de skin persiste en localStorage (`tetris-skin`).
-- [ ] Al llenar el tablero aparece el modal de game over con la puntuación final.
-- [ ] El botón "JUGAR DE NUEVO" reinicia el juego sin recargar la página.
-- [ ] El botón "GUARDAR" inserta el score en Supabase con `user_id = null`.
-- [ ] Tras guardar, el botón se deshabilita y muestra "✓ PUNTUACIÓN GUARDADA".
-- [ ] El botón pausa detiene el game loop y muestra el overlay; reanudar lo reactiva.
-- [ ] `npm run build` completa sin errores.
+- [x] `/games` muestra la card de TETRIS en el catálogo.
+- [x] `/games/tetris` carga la ficha propia del juego sin errores.
+- [x] `/games/tetris` muestra el top 10 de scores reales de TETRIS.
+- [x] `/player/tetris` muestra el selector de nivel inicial (1–10) antes de empezar.
+- [x] `/player/tetris` carga sin errores de TypeScript ni warnings en consola.
+- [x] El canvas ocupa el `crt-screen` sin scroll horizontal en desktop y tablet.
+- [x] El juego arranca al confirmar el nivel inicial.
+- [x] Controles de teclado: ← → mueven la pieza, ↓ soft drop, ↑ / X rotan, Space hard drop, P / Escape pausa.
+- [x] El canvas secundario muestra la siguiente pieza en tiempo real.
+- [x] El HUD de React muestra score, líneas y nivel actualizados en tiempo real.
+- [x] El selector de skin cambia el estilo visual del canvas sin reiniciar la partida.
+- [x] La preferencia de skin persiste en localStorage (`tetris-skin`).
+- [x] Al llenar el tablero aparece el modal de game over con la puntuación final.
+- [x] El botón "JUGAR DE NUEVO" reinicia el juego sin recargar la página.
+- [x] El botón "GUARDAR" inserta el score en Supabase con `user_id = null`.
+- [x] Tras guardar, el botón se deshabilita y muestra "✓ PUNTUACIÓN GUARDADA".
+- [x] El botón pausa detiene el game loop y muestra el overlay; reanudar lo reactiva.
+- [x] `npm run build` completa sin errores.
 
 ---
 
