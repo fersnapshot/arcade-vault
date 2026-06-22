@@ -1,62 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tetris</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="wrapper">
-    <button id="theme-toggle" class="theme-toggle">
-      <span class="toggle-icon">&#9790;</span>
-      <span class="toggle-label">LIGHT</span>
-    </button>
-    <h1 class="game-title">TETRIS</h1>
-    <div class="game-container">
-      <canvas id="board" width="300" height="600"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tetris</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1 class="game-title">TETRIS</h1>
+      <div class="game-container">
+        <canvas id="board" width="300" height="600"></canvas>
 
-      <aside class="panel">
-        <div class="panel-section">
-          <span class="label">SCORE</span>
-          <span class="value" id="score">0</span>
+        <aside class="panel">
+          <div class="panel-section">
+            <span class="label">SCORE</span>
+            <span class="value" id="score">0</span>
+          </div>
+          <div class="panel-section">
+            <span class="label">LINES</span>
+            <span class="value" id="lines">0</span>
+          </div>
+          <div class="panel-section">
+            <span class="label">LEVEL</span>
+            <span class="value" id="level">1</span>
+          </div>
+
+          <div class="panel-section">
+            <span class="label">NEXT</span>
+            <canvas id="next-canvas" width="120" height="120"></canvas>
+          </div>
+
+          <div class="panel-section controls">
+            <span class="label">CONTROLS</span>
+            <ul>
+              <li><kbd>←</kbd><kbd>→</kbd> mover</li>
+              <li><kbd>↑</kbd> rotar</li>
+              <li><kbd>↓</kbd> bajar</li>
+              <li><kbd>Space</kbd> caída</li>
+              <li><kbd>P</kbd> pausa</li>
+            </ul>
+          </div>
+
+          <div class="panel-section">
+            <label class="theme-toggle">
+              <input type="checkbox" id="themeToggle">
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="toggle-label">Luz</span>
+            </label>
+          </div>
+
+          <div class="panel-section">
+            <span class="label">SKIN</span>
+            <div class="skin-selector">
+              <button class="skin-btn active" data-skin="retro" title="Retro">▣</button>
+              <button class="skin-btn" data-skin="neon" title="Neon">◈</button>
+              <button class="skin-btn" data-skin="pastel" title="Pastel">◉</button>
+              <button class="skin-btn" data-skin="pixel" title="Pixel Art">▦</button>
+            </div>
+            <span class="skin-name" id="skinName">Retro</span>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Leaderboard pantalla de inicio -->
+      <div id="leaderboard-panel" class="leaderboard-panel">
+        <div class="lb-header">
+          <span class="label">TOP 5 RECORDS</span>
+          <button id="reset-records-btn" title="Borrar records">✕</button>
         </div>
-        <div class="panel-section">
-          <span class="label">LINES</span>
-          <span class="value" id="lines">0</span>
-        </div>
-        <div class="panel-section">
-          <span class="label">LEVEL</span>
-          <span class="value" id="level">1</span>
+        <table id="leaderboard-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Score</th>
+              <th>Líneas</th>
+              <th>Combo</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body">
+          </tbody>
+        </table>
+      </div>
+
+      <div id="overlay" class="overlay hidden">
+        <!-- Game Over box -->
+        <div id="gameover-box" class="overlay-box">
+          <p id="overlay-title">GAME OVER</p>
+          <p id="overlay-score"></p>
+          <div id="name-entry" class="name-entry hidden">
+            <p class="name-entry-label">Entra en el Top 5!</p>
+            <input type="text" id="player-name" placeholder="Tu nombre" maxlength="12" />
+            <button id="save-score-btn">Guardar</button>
+          </div>
+          <div id="overlay-leaderboard" class="overlay-leaderboard hidden">
+            <table id="overlay-lb-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Score</th>
+                  <th>Líneas</th>
+                  <th>Combo</th>
+                </tr>
+              </thead>
+              <tbody id="overlay-lb-body"></tbody>
+            </table>
+          </div>
+          <button id="restart-btn">Reiniciar</button>
         </div>
 
-        <div class="panel-section">
-          <span class="label">NEXT</span>
-          <canvas id="next-canvas" width="120" height="120"></canvas>
-        </div>
+        <!-- Pause menu box -->
+        <div id="pause-box" class="overlay-box hidden">
+          <p class="pause-title">PAUSA</p>
 
-        <div class="panel-section controls">
-          <span class="label">CONTROLS</span>
-          <ul>
-            <li><kbd>←</kbd><kbd>→</kbd> mover</li>
-            <li><kbd>↑</kbd> rotar</li>
-            <li><kbd>↓</kbd> bajar</li>
-            <li><kbd>Space</kbd> caída</li>
-            <li><kbd>P</kbd> pausa</li>
-          </ul>
-        </div>
-      </aside>
-    </div>
+          <div class="pause-menu">
+            <button id="resume-btn" class="pause-btn">▶ Reanudar</button>
+            <button id="restart-pause-btn" class="pause-btn">↺ Reiniciar</button>
+            <button id="controls-btn" class="pause-btn">? Ver controles</button>
+          </div>
 
-    <div id="overlay" class="overlay hidden">
-      <div class="overlay-box">
-        <p id="overlay-title">GAME OVER</p>
-        <p id="overlay-score"></p>
-        <button id="restart-btn">Reiniciar</button>
+          <div class="pause-level">
+            <label for="start-level-select">Nivel inicial</label>
+            <select id="start-level-select">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+
+          <!-- Controls panel (hidden by default) -->
+          <div id="pause-controls" class="pause-controls hidden">
+            <p class="pause-controls-title">CONTROLES</p>
+            <ul>
+              <li><kbd>←</kbd><kbd>→</kbd> mover</li>
+              <li><kbd>↑</kbd> rotar</li>
+              <li><kbd>↓</kbd> bajar despacio</li>
+              <li><kbd>Space</kbd> caída rápida</li>
+              <li><kbd>P</kbd> / <kbd>Esc</kbd> pausa</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="game.js"></script>
-</body>
+    <script src="game.js"></script>
+  </body>
 </html>
