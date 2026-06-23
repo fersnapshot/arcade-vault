@@ -1,6 +1,6 @@
 # SPEC 09 — Integración de Snake como juego jugable
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 05-asteroids-game, 06-games-db-and-leaderboard
 - **Date:** 2026-06-23
 - **Objective:** Integrar SNAKE como juego jugable en Arcade Vault, accesible
@@ -137,25 +137,25 @@ user_id: null })`. Referencia: `src/app/player/asteroids/actions.ts`.
 
 ## Acceptance criteria
 
-- [ ] `/games` muestra la card de SNAKE en el catálogo.
-- [ ] `/games/snake` carga la ficha propia del juego sin errores.
-- [ ] `/games/snake` muestra el top 10 de scores reales de SNAKE.
-- [ ] `/player/snake` muestra el selector de velocidad inicial (niveles 1–9) antes de empezar.
-- [ ] `/player/snake` carga sin errores de TypeScript ni warnings en consola.
-- [ ] El canvas ocupa el `crt-screen` sin scroll horizontal en desktop y tablet.
-- [ ] El juego arranca al confirmar el nivel inicial.
-- [ ] Controles de teclado: ←↑→↓ y WASD mueven la serpiente, P / Escape pausa/reanuda.
-- [ ] El HUD de React muestra score, vida (1) y nivel actualizados en tiempo real.
-- [ ] En cada spawn aparece una fruta aleatoria del atlas dibujada con su sprite.
-- [ ] La puntuación por fruta corresponde a la tabla fija según el nivel actual.
-- [ ] El nivel sube automáticamente cada 5 frutas comidas (máx. nivel 9).
-- [ ] El juego termina al chocar la cabeza con una pared o con el propio cuerpo.
-- [ ] Al morir aparece el modal de game over con la puntuación final.
-- [ ] El botón "JUGAR DE NUEVO" reinicia el juego sin recargar la página.
-- [ ] El botón "GUARDAR" inserta el score en Supabase con `user_id = null`.
-- [ ] Tras guardar, el botón se deshabilita y muestra "✓ PUNTUACIÓN GUARDADA".
-- [ ] El botón pausa detiene el game loop y muestra el overlay; reanudar lo reactiva.
-- [ ] `npm run build` completa sin errores.
+- [x] `/games` muestra la card de SNAKE en el catálogo.
+- [x] `/games/snake` carga la ficha propia del juego sin errores.
+- [x] `/games/snake` muestra el top 10 de scores reales de SNAKE.
+- [x] `/player/snake` muestra el selector de velocidad inicial (niveles 1–9) antes de empezar.
+- [x] `/player/snake` carga sin errores de TypeScript ni warnings en consola.
+- [x] El canvas ocupa el `crt-screen` sin scroll horizontal en desktop y tablet.
+- [x] El juego arranca al confirmar el nivel inicial.
+- [x] Controles de teclado: ←↑→↓ y WASD mueven la serpiente, P / Escape pausa/reanuda.
+- [x] El HUD de React muestra score, vida (1) y nivel actualizados en tiempo real.
+- [x] En cada spawn aparece una fruta aleatoria del atlas dibujada con su sprite.
+- [x] La puntuación por fruta corresponde a la tabla fija según el nivel actual.
+- [x] El nivel sube automáticamente cada 5 frutas comidas (máx. nivel 9).
+- [x] El juego termina al chocar la cabeza con una pared o con el propio cuerpo.
+- [x] Al morir aparece el modal de game over con la puntuación final.
+- [x] El botón "JUGAR DE NUEVO" reinicia el juego sin recargar la página.
+- [x] El botón "GUARDAR" inserta el score en Supabase con `user_id = null`.
+- [x] Tras guardar, el botón se deshabilita y muestra "✓ PUNTUACIÓN GUARDADA".
+- [x] El botón pausa detiene el game loop y muestra el overlay; reanudar lo reactiva.
+- [x] `npm run build` completa sin errores.
 
 ---
 
