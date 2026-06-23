@@ -26,6 +26,7 @@ export interface SnakeRef {
 }
 
 interface Props {
+  startLevel?: number;
   onScore: (score: number) => void;
   onLevel: (level: number) => void;
   onGameOver: (finalScore: number) => void;
@@ -34,6 +35,7 @@ interface Props {
 }
 
 export default function SnakeGame({
+  startLevel = 1,
   onScore,
   onLevel,
   onGameOver,
@@ -42,6 +44,7 @@ export default function SnakeGame({
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const restartLevelRef = useRef<number | null>(null);
+  const initialLevelRef = useRef(startLevel);
   const pausedRef = useRef(false);
   const cbRef = useRef({ onScore, onLevel, onGameOver, onPause });
 
@@ -275,7 +278,7 @@ export default function SnakeGame({
       rafId = requestAnimationFrame(loop);
     }
 
-    initGame(1);
+    initGame(initialLevelRef.current);
     rafId = requestAnimationFrame(loop);
 
     return () => {
