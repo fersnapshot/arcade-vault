@@ -475,10 +475,13 @@ export default function ArkanoidGame({
         }
       }
 
+      // Colisión barrida (swept): la posición previa del borde inferior de la bola
+      // antes del movimiento de este frame. Evita tunneling a velocidades altas.
+      const prevBallBottom = ball.y + ball.size - ball.vy * dt;
       if (
         ball.vy > 0 &&
+        prevBallBottom < paddle.y &&
         ball.y + ball.size >= paddle.y &&
-        ball.y + ball.size <= paddle.y + paddle.height &&
         ball.x + ball.size > paddle.x &&
         ball.x < paddle.x + paddle.width
       ) {

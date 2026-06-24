@@ -29,6 +29,27 @@ function dispatchKey(key: string, type: "keydown" | "keyup") {
   window.dispatchEvent(new KeyboardEvent(type, { key, code, bubbles: true }));
 }
 
+/** Devuelve los event handlers de presión/liberación para un botón táctil.
+ *  Incluye onTouchCancel para evitar que la tecla quede "trabada" cuando el
+ *  navegador cancela el toque (scroll takeover, multitouch, interrupción del SO). */
+function keyHandlers(keyName: string) {
+  const release = (e: React.TouchEvent) => {
+    e.preventDefault();
+    dispatchKey(keyName, "keyup");
+  };
+  return {
+    onTouchStart: (e: React.TouchEvent) => {
+      e.preventDefault();
+      dispatchKey(keyName, "keydown");
+    },
+    onTouchEnd: release,
+    onTouchCancel: release,
+    onMouseDown: () => dispatchKey(keyName, "keydown"),
+    onMouseUp: () => dispatchKey(keyName, "keyup"),
+    onMouseLeave: () => dispatchKey(keyName, "keyup"),
+  };
+}
+
 function DpadButton({
   label,
   keyName,
@@ -43,17 +64,7 @@ function DpadButton({
   return (
     <button
       className={`flex items-center justify-center bg-gray-700 border border-gray-500 text-white text-lg font-bold select-none active:bg-gray-500 ${className ?? ""}`}
-      onTouchStart={(e) => {
-        e.preventDefault();
-        dispatchKey(keyName, "keydown");
-      }}
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        dispatchKey(keyName, "keyup");
-      }}
-      onMouseDown={() => dispatchKey(keyName, "keydown")}
-      onMouseUp={() => dispatchKey(keyName, "keyup")}
-      onMouseLeave={() => dispatchKey(keyName, "keyup")}
+      {...keyHandlers(keyName)}
     >
       {label}
     </button>
@@ -89,17 +100,7 @@ export function VirtualGamepad({
           {keyMap.actionB && (
             <button
               className="w-14 h-14 rounded-full bg-blue-700 border-2 border-blue-400 text-white font-bold text-sm select-none active:bg-blue-500"
-              onTouchStart={(e) => {
-                e.preventDefault();
-                dispatchKey(keyMap.actionB!, "keydown");
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                dispatchKey(keyMap.actionB!, "keyup");
-              }}
-              onMouseDown={() => dispatchKey(keyMap.actionB!, "keydown")}
-              onMouseUp={() => dispatchKey(keyMap.actionB!, "keyup")}
-              onMouseLeave={() => dispatchKey(keyMap.actionB!, "keyup")}
+              {...keyHandlers(keyMap.actionB)}
             >
               B
             </button>
@@ -107,17 +108,7 @@ export function VirtualGamepad({
           {keyMap.actionA && (
             <button
               className="w-14 h-14 rounded-full bg-red-700 border-2 border-red-400 text-white font-bold text-sm select-none active:bg-red-500"
-              onTouchStart={(e) => {
-                e.preventDefault();
-                dispatchKey(keyMap.actionA!, "keydown");
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                dispatchKey(keyMap.actionA!, "keyup");
-              }}
-              onMouseDown={() => dispatchKey(keyMap.actionA!, "keydown")}
-              onMouseUp={() => dispatchKey(keyMap.actionA!, "keyup")}
-              onMouseLeave={() => dispatchKey(keyMap.actionA!, "keyup")}
+              {...keyHandlers(keyMap.actionA)}
             >
               A
             </button>
