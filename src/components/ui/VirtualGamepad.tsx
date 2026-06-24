@@ -17,8 +17,16 @@ interface VirtualGamepadProps {
   onSkinChange: (skin: string) => void;
 }
 
+// Maps e.key values to e.code so games using either property both respond
+const KEY_TO_CODE: Record<string, string> = {
+  " ": "Space",
+  x: "KeyX",
+  z: "KeyZ",
+};
+
 function dispatchKey(key: string, type: "keydown" | "keyup") {
-  window.dispatchEvent(new KeyboardEvent(type, { key, bubbles: true }));
+  const code = KEY_TO_CODE[key] ?? key;
+  window.dispatchEvent(new KeyboardEvent(type, { key, code, bubbles: true }));
 }
 
 function DpadButton({
