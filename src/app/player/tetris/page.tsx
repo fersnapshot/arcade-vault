@@ -259,6 +259,7 @@ export default function TetrisPage() {
       <VirtualGamepad
         keyMap={GAMEPAD_KEYMAP}
         onPause={handlePauseClick}
+        onExit={() => router.push("/games")}
         skin={skin}
         skins={SKINS}
         onSkinChange={(s) => handleSkinChange(s as SkinId)}

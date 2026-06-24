@@ -12,6 +12,7 @@ interface GamepadKeyMap {
 interface VirtualGamepadProps {
   keyMap: GamepadKeyMap;
   onPause: () => void;
+  onExit?: () => void;
   skin: string;
   skins: { id: string; label: string }[];
   onSkinChange: (skin: string) => void;
@@ -74,6 +75,7 @@ function DpadButton({
 export function VirtualGamepad({
   keyMap,
   onPause,
+  onExit,
   skin,
   skins,
   onSkinChange,
@@ -138,6 +140,16 @@ export function VirtualGamepad({
               </option>
             ))}
           </select>
+        )}
+
+        {onExit && (
+          <button
+            className="px-4 py-2 bg-red-800 border border-red-600 text-white text-xs font-bold rounded select-none active:bg-red-600"
+            onTouchStart={(e) => e.preventDefault()}
+            onClick={onExit}
+          >
+            SALIR
+          </button>
         )}
       </div>
     </div>
