@@ -71,7 +71,7 @@ Alternativas evaluadas y descartadas:
 
 **Obligatorio antes de terminar.** Añade una fila por cada juego evaluado (recomendado, alternativa descartada y rechazados relevantes) a `references/suggested-games.md`.
 
-Formato de fila: `| YYYY-MM-DD | Título | categoría | recomendado/alternativa/descartado | motivo breve |`
+Formato de fila: `| YYYY-MM-DD | Título | categoría | recomendado/alternativa/descartado | motivo breve de la decisión | descripción breve del juego (mecánica central, 1 frase) |`
 
 ## Fase 6 — Cierre
 

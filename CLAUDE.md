@@ -27,6 +27,7 @@ No se ha configurado ningún ejecutor (motor) de pruebas.
 ## Agentes
 
 - `@game-planner` — planifica y decide qué juego nuevo encaja con la plataforma. Lee el catálogo actual y la memoria de propuestas previas (`references/suggested-games.md`), recomienda UN juego con razonamiento, y actualiza la memoria al terminar. No escribe specs ni código. Usar antes de `/spec-game`.
+- `@game-jam` — dado el **nombre de un juego** (con descripción opcional), genera de forma autónoma **2 specs completos** (variantes A y B) en `specs/game-jam/<game-id>/`, listos para revisar y elegir con `/spec-impl`. No hace preguntas, no implementa código.
 
 ## Arquitectura
 
