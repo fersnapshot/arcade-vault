@@ -1625,6 +1625,23 @@ a {
   }
 }
 
+@media (max-width: 767px) {
+  .player-hud {
+    display: none;
+  }
+  .av-player {
+    margin: 0;
+    padding: 0 0 16px;
+  }
+  .crt {
+    border-radius: 0;
+    padding: 8px;
+  }
+  .crt-screen {
+    border-radius: 4px;
+  }
+}
+
 /* misc */
 .divider {
   height: 1px;
