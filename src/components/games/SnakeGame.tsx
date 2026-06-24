@@ -301,26 +301,57 @@ export default function SnakeGame({
       notify();
     }
 
+    const SKIN_GRID: Record<
+      SkinId,
+      { grid: string; border: string; glow: string }
+    > = {
+      classic: {
+        grid: "rgba(0,200,0,0.12)",
+        border: "#00cc33",
+        glow: "rgba(0,204,51,0.55)",
+      },
+      neon: {
+        grid: "rgba(0,255,170,0.14)",
+        border: "#00ffaa",
+        glow: "rgba(0,255,170,0.7)",
+      },
+      retro: {
+        grid: "rgba(120,200,40,0.13)",
+        border: "#7ec820",
+        glow: "rgba(126,200,32,0.55)",
+      },
+    };
+
     function draw() {
       // Background
       ctx.fillStyle = "#0a0a0a";
       ctx.fillRect(0, 0, W, H);
 
-      // Subtle grid
-      ctx.strokeStyle = "rgba(0,200,0,0.06)";
+      const sg = SKIN_GRID[skinRef.current];
+
+      // Grid lines
+      ctx.strokeStyle = sg.grid;
       ctx.lineWidth = 0.5;
-      for (let x = 0; x <= COLS; x++) {
+      for (let x = 1; x < COLS; x++) {
         ctx.beginPath();
         ctx.moveTo(x * CELL, 0);
         ctx.lineTo(x * CELL, H);
         ctx.stroke();
       }
-      for (let y = 0; y <= ROWS; y++) {
+      for (let y = 1; y < ROWS; y++) {
         ctx.beginPath();
         ctx.moveTo(0, y * CELL);
         ctx.lineTo(W, y * CELL);
         ctx.stroke();
       }
+
+      // Border glow + stroke
+      ctx.shadowColor = sg.glow;
+      ctx.shadowBlur = 18;
+      ctx.strokeStyle = sg.border;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(1.5, 1.5, W - 3, H - 3);
+      ctx.shadowBlur = 0;
 
       // Snake body
       for (let i = snake.length - 1; i >= 0; i--) {
