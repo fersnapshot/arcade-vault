@@ -1,6 +1,59 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useImperativeHandle, useRef, type Ref } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useImperativeHandle,
+  useRef,
+  type Ref,
+} from "react";
+
+export type SkinId = "classic" | "neon" | "retro";
+
+const SKINS: Record<
+  SkinId,
+  {
+    name: string;
+    ship: string;
+    asteroid: string;
+    bullet: string;
+    particle: string;
+    powerUp: string;
+    thrust: string;
+    shadowBlur: number;
+  }
+> = {
+  classic: {
+    name: "Classic",
+    ship: "#ffffff",
+    asteroid: "#ffffff",
+    bullet: "#ffffff",
+    particle: "#ffffff",
+    powerUp: "#00ffff",
+    thrust: "rgba(255,130,0,0.85)",
+    shadowBlur: 0,
+  },
+  neon: {
+    name: "Neon",
+    ship: "#00ffff",
+    asteroid: "#ff00ff",
+    bullet: "#ffff00",
+    particle: "#ff8800",
+    powerUp: "#00ff88",
+    thrust: "rgba(0,255,200,0.9)",
+    shadowBlur: 14,
+  },
+  retro: {
+    name: "Retro",
+    ship: "#ffd54f",
+    asteroid: "#81c784",
+    bullet: "#e57373",
+    particle: "#ffb74d",
+    powerUp: "#4dd0e1",
+    thrust: "rgba(255,100,0,0.85)",
+    shadowBlur: 0,
+  },
+};
 
 const W = 800;
 const H = 600;
@@ -45,11 +98,14 @@ class Bullet {
     if (this.ttl <= 0) this.dead = true;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = "#fff";
+  draw(ctx: CanvasRenderingContext2D, color: string, shadowBlur: number) {
+    ctx.shadowColor = color;
+    ctx.shadowBlur = shadowBlur;
+    ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowBlur = 0;
   }
 }
 
@@ -100,11 +156,13 @@ class Asteroid {
     ];
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, color: string, shadowBlur: number) {
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.rot);
-    ctx.strokeStyle = "#fff";
+    ctx.shadowColor = color;
+    ctx.shadowBlur = shadowBlur;
+    ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     ctx.lineJoin = "round";
     ctx.beginPath();
@@ -114,6 +172,7 @@ class Asteroid {
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
+    ctx.shadowBlur = 0;
   }
 }
 
@@ -145,18 +204,21 @@ class PowerUp {
     if (this.ttl <= 0) this.dead = true;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, color: string, shadowBlur: number) {
     if (this.ttl < 2 && Math.floor(this.ttl * 8) % 2 === 0) return;
     const pulse = 0.85 + Math.sin(performance.now() / 150) * 0.15;
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(Math.PI / 4);
-    ctx.strokeStyle = "#0ff";
+    ctx.shadowColor = color;
+    ctx.shadowBlur = shadowBlur;
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     const r = this.radius * pulse;
     ctx.strokeRect(-r, -r, r * 2, r * 2);
     ctx.restore();
-    ctx.fillStyle = "#0ff";
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = color;
     ctx.font = "bold 12px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -240,14 +302,21 @@ class Ship {
     return [new Bullet(ox, oy, this.angle)];
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(
+    ctx: CanvasRenderingContext2D,
+    color: string,
+    shadowBlur: number,
+    thrustColor: string,
+  ) {
     if (this.dead) return;
     if (this.invincible > 0 && Math.floor(this.invincible * 8) % 2 === 0)
       return;
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
-    ctx.strokeStyle = "#fff";
+    ctx.shadowColor = color;
+    ctx.shadowBlur = shadowBlur;
+    ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     ctx.lineJoin = "round";
     ctx.beginPath();
@@ -258,14 +327,16 @@ class Ship {
     ctx.closePath();
     ctx.stroke();
     if (this.thrusting && Math.random() > 0.35) {
+      ctx.shadowBlur = 0;
       ctx.beginPath();
       ctx.moveTo(-8, -4);
       ctx.lineTo(-8 - rand(6, 14), 0);
       ctx.lineTo(-8, 4);
-      ctx.strokeStyle = "rgba(255, 130, 0, 0.85)";
+      ctx.strokeStyle = thrustColor;
       ctx.stroke();
     }
     ctx.restore();
+    ctx.shadowBlur = 0;
   }
 }
 
@@ -297,9 +368,13 @@ class Particle {
     if (this.ttl <= 0) this.dead = true;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, color: string) {
     const alpha = this.ttl / this.life;
-    ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(2)})`;
+    // parse color to inject alpha — color is always a hex #rrggbb
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+    ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
@@ -314,6 +389,7 @@ export interface AsteroidsRef {
 }
 
 interface Props {
+  skin?: SkinId;
   onScore: (score: number) => void;
   onLives: (lives: number) => void;
   onLevel: (level: number) => void;
@@ -323,6 +399,7 @@ interface Props {
 }
 
 export default function AsteroidsGame({
+  skin = "classic",
   onScore,
   onLives,
   onLevel,
@@ -334,9 +411,11 @@ export default function AsteroidsGame({
   const shouldRestartRef = useRef(false);
   const pausedRef = useRef(false);
   const cbRef = useRef({ onScore, onLives, onLevel, onGameOver, onPause });
-  
+  const skinRef = useRef<SkinId>(skin);
+
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause };
+    skinRef.current = skin;
   });
 
   useImperativeHandle(ref, () => ({
@@ -564,16 +643,17 @@ export default function AsteroidsGame({
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, W, H);
 
-      particles.forEach((p) => p.draw(ctx));
-      asteroids.forEach((a) => a.draw(ctx));
-      powerUps.forEach((p) => p.draw(ctx));
-      bullets.forEach((b) => b.draw(ctx));
-      ship.draw(ctx);
+      const sk = SKINS[skinRef.current];
+      particles.forEach((p) => p.draw(ctx, sk.particle));
+      asteroids.forEach((a) => a.draw(ctx, sk.asteroid, sk.shadowBlur));
+      powerUps.forEach((p) => p.draw(ctx, sk.powerUp, sk.shadowBlur));
+      bullets.forEach((b) => b.draw(ctx, sk.bullet, sk.shadowBlur));
+      ship.draw(ctx, sk.ship, sk.shadowBlur, sk.thrust);
 
       if (ship.tripleShot > 0) {
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
-        ctx.fillStyle = "#0ff";
+        ctx.fillStyle = sk.powerUp;
         ctx.font = "15px monospace";
         ctx.fillText(`3x  ${ship.tripleShot.toFixed(1)}s`, 14, 46);
       }
