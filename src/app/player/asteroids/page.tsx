@@ -5,10 +5,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AsteroidsGame, {
   type AsteroidsRef,
+  type SkinId,
 } from "@/components/games/AsteroidsGame";
 import { saveScore } from "./actions";
 
 type GameState = "playing" | "paused" | "over";
+
+const SKINS: { id: SkinId; label: string }[] = [
+  { id: "classic", label: "CLASSIC" },
+  { id: "neon", label: "NEON" },
+  { id: "retro", label: "RETRO" },
+];
+
+function getInitialSkin(): SkinId {
+  if (typeof window === "undefined") return "classic";
+  return (localStorage.getItem("asteroids-skin") as SkinId) ?? "classic";
+}
 
 export default function AsteroidsPage() {
   const router = useRouter();
@@ -22,6 +34,12 @@ export default function AsteroidsPage() {
   const [playerName, setPlayerName] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
+
+  function handleSkinChange(s: SkinId) {
+    setSkin(s);
+    localStorage.setItem("asteroids-skin", s);
+  }
 
   function handlePauseClick() {
     gameRef.current?.togglePause();
@@ -64,6 +82,24 @@ export default function AsteroidsPage() {
           <span className="l">NIVEL</span>
           <span className="v">LV.{level}</span>
         </div>
+
+        {/* Skin selector */}
+        <div className="hud-stat" style={{ gap: 4 }}>
+          <span className="l">SKIN</span>
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {SKINS.map((s) => (
+              <button
+                key={s.id}
+                className={`btn${skin === s.id ? " pulse" : " ghost"}`}
+                style={{ fontSize: 9, padding: "2px 6px" }}
+                onClick={() => handleSkinChange(s.id)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="hud-actions">
           <button
             className="btn"
@@ -83,6 +119,7 @@ export default function AsteroidsPage() {
         <div className="crt-screen">
           <AsteroidsGame
             ref={gameRef}
+            skin={skin}
             onScore={setScore}
             onLives={setLives}
             onLevel={setLevel}

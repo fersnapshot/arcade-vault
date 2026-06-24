@@ -24,6 +24,12 @@ No se ha configurado ningún ejecutor (motor) de pruebas.
 - `/frontend-design` — siempre usar para diseñar la interfaz de usuario.
 - `/spec-game` — diseña el spec para integrar un juego nuevo (con leaderboard) siguiendo el patrón de los specs 05/06. Solo escribe `specs/NN-slug.md`; no implementa. Definido en `.claude/skills/spec-game/`.
 
+## Agentes
+
+- `@game-planner` — planifica y decide qué juego nuevo encaja con la plataforma. Lee el catálogo actual y la memoria de propuestas previas (`references/suggested-games.md`), recomienda UN juego con razonamiento, y actualiza la memoria al terminar. No escribe specs ni código. Usar antes de `/spec-game`.
+- `@game-jam` — dado el **nombre de un juego** (con descripción opcional), genera de forma autónoma **2 specs completos** (variantes A y B) en `specs/game-jam/<game-id>/`, listos para revisar y elegir con `/spec-impl`. No hace preguntas, no implementa código.
+- `@skin-designer` — dado el **id o nombre de un juego ya implementado**, audita su sistema de skins y garantiza que tenga al menos 3: `classic` (default), `neon` y `retro`. Implementa las que falten modificando el componente del juego y su página player. No toca la lógica de gameplay ni la página de detalle.
+
 ## Arquitectura
 
 Solo App Router — sin Pages Router. Todas las rutas viven bajo `src/app/`. El layout raíz en `src/app/layout.tsx` configura las fuentes **Press Start 2P** (`--font-pixel`) y **JetBrains Mono** (`--font-mono`), el fondo CRT/ruido, el `Nav`, el footer, y envuelve todo en `UserProvider`.
