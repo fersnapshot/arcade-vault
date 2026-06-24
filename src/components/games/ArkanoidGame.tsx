@@ -38,6 +38,48 @@ const MAX_LEVELS = 10;
 const BLOCKS_BASE = BLOCK_COLS * BLOCK_ROWS_BASE;
 const BLOCKS_INCREMENT = 10;
 
+export type SkinId = "classic" | "neon" | "retro";
+
+// Mapeo de color de brick a colores concretos por skin
+const SKIN_BRICK_COLORS: Record<SkinId, Record<string, string>> = {
+  classic: {
+    red: "#e53935",
+    cyan: "#00acc1",
+    green: "#43a047",
+    magenta: "#8e24aa",
+    yellow: "#f9a825",
+    hotpink: "#e91e63",
+  },
+  neon: {
+    red: "#ff1744",
+    cyan: "#00e5ff",
+    green: "#00e676",
+    magenta: "#e040fb",
+    yellow: "#ffea00",
+    hotpink: "#ff4081",
+  },
+  retro: {
+    red: "#c0392b",
+    cyan: "#16a085",
+    green: "#27ae60",
+    magenta: "#8e44ad",
+    yellow: "#f39c12",
+    hotpink: "#e91e63",
+  },
+};
+
+const SKIN_PADDLE: Record<SkinId, string> = {
+  classic: "#90a4ae",
+  neon: "#40c4ff",
+  retro: "#b0bec5",
+};
+
+const SKIN_BALL: Record<SkinId, string> = {
+  classic: "#ffffff",
+  neon: "#ffffff",
+  retro: "#ecf0f1",
+};
+
 export interface ArkanoidRef {
   restart: (level?: number) => void;
   togglePause: () => void;
@@ -46,6 +88,7 @@ export interface ArkanoidRef {
 
 interface Props {
   initialLevel?: number;
+  skin?: SkinId;
   onScore: (score: number) => void;
   onLives: (lives: number) => void;
   onLevel: (level: number) => void;
@@ -112,6 +155,7 @@ function generateBlocks(level: number): Block[] {
 
 export default function ArkanoidGame({
   initialLevel = 1,
+  skin = "classic",
   onScore,
   onLives,
   onLevel,
@@ -132,9 +176,11 @@ export default function ArkanoidGame({
     onPause,
     onMute,
   });
+  const skinRef = useRef<SkinId>(skin ?? "classic");
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause, onMute };
+    skinRef.current = skin ?? "classic";
   });
 
   useImperativeHandle(ref, () => ({
@@ -248,6 +294,128 @@ export default function ArkanoidGame({
       ball.vy = -speed;
     }
 
+    // --- Funciones de dibujo por skin ---
+
+    function drawBrickClassic(context: CanvasRenderingContext2D, block: Block) {
+      const color = SKIN_BRICK_COLORS.classic[block.color] ?? "#888";
+      context.fillStyle = color;
+      context.fillRect(
+        block.x + 1,
+        block.y + 1,
+        block.width - 2,
+        block.height - 2,
+      );
+      // borde oscuro
+      context.strokeStyle = "rgba(0,0,0,0.4)";
+      context.lineWidth = 1;
+      context.strokeRect(
+        block.x + 1,
+        block.y + 1,
+        block.width - 2,
+        block.height - 2,
+      );
+    }
+
+    function drawBrickNeon(context: CanvasRenderingContext2D, block: Block) {
+      const color = SKIN_BRICK_COLORS.neon[block.color] ?? "#0ff";
+      context.shadowColor = color;
+      context.shadowBlur = 12;
+      context.fillStyle = color;
+      context.fillRect(
+        block.x + 2,
+        block.y + 2,
+        block.width - 4,
+        block.height - 4,
+      );
+      context.shadowBlur = 4;
+      context.fillStyle = "rgba(255,255,255,0.55)";
+      context.fillRect(
+        block.x + block.width * 0.3,
+        block.y + block.height * 0.25,
+        block.width * 0.4,
+        block.height * 0.4,
+      );
+      context.shadowBlur = 0;
+    }
+
+    function drawBrickRetro(context: CanvasRenderingContext2D, block: Block) {
+      const color = SKIN_BRICK_COLORS.retro[block.color] ?? "#888";
+      context.fillStyle = color;
+      context.fillRect(
+        block.x + 1,
+        block.y + 1,
+        block.width - 2,
+        block.height - 2,
+      );
+      // banda de brillo superior
+      context.fillStyle = "rgba(255,255,255,0.3)";
+      context.fillRect(block.x + 1, block.y + 1, block.width - 2, 4);
+    }
+
+    function drawBrick(context: CanvasRenderingContext2D, block: Block) {
+      const s = skinRef.current;
+      if (s === "neon") {
+        drawBrickNeon(context, block);
+      } else if (s === "retro") {
+        drawBrickRetro(context, block);
+      } else if (s === "classic") {
+        drawBrickClassic(context, block);
+      } else {
+        // fallback: sprite original
+        drawSprite(
+          context,
+          `block_${block.color}`,
+          block.x,
+          block.y,
+          block.width,
+          block.height,
+        );
+      }
+    }
+
+    function drawPaddleCanvas(context: CanvasRenderingContext2D, p: Paddle) {
+      const s = skinRef.current;
+      if (s === "neon") {
+        const color = SKIN_PADDLE.neon;
+        context.shadowColor = color;
+        context.shadowBlur = 16;
+        context.fillStyle = color;
+        context.fillRect(p.x, p.y, p.width, p.height);
+        context.shadowBlur = 0;
+      } else if (s === "retro") {
+        const color = SKIN_PADDLE.retro;
+        context.fillStyle = color;
+        context.fillRect(p.x, p.y, p.width, p.height);
+        context.fillStyle = "rgba(255,255,255,0.3)";
+        context.fillRect(p.x, p.y, p.width, 4);
+      } else {
+        // classic
+        const color = SKIN_PADDLE.classic;
+        context.fillStyle = color;
+        context.fillRect(p.x, p.y, p.width, p.height);
+        context.strokeStyle = "rgba(255,255,255,0.2)";
+        context.lineWidth = 1;
+        context.strokeRect(p.x, p.y, p.width, p.height);
+      }
+    }
+
+    function drawBallCanvas(context: CanvasRenderingContext2D, b: Ball) {
+      const s = skinRef.current;
+      const color = SKIN_BALL[s] ?? "#fff";
+      const cx = b.x + b.size / 2;
+      const cy = b.y + b.size / 2;
+      const r = b.size / 2;
+      if (s === "neon") {
+        context.shadowColor = "#00e5ff";
+        context.shadowBlur = 18;
+      }
+      context.fillStyle = color;
+      context.beginPath();
+      context.arc(cx, cy, r, 0, Math.PI * 2);
+      context.fill();
+      context.shadowBlur = 0;
+    }
+
     function update(delta: number) {
       if (shouldRestartRef.current !== false) {
         const lvl = shouldRestartRef.current;
@@ -355,8 +523,12 @@ export default function ArkanoidGame({
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, W, H);
 
+      const s = skinRef.current;
+
       for (const block of blocks) {
-        if (block.alive) {
+        if (!block.alive) continue;
+        if (s === "classic") {
+          // skin classic: sprites originales
           drawSprite(
             ctx,
             `block_${block.color}`,
@@ -365,6 +537,8 @@ export default function ArkanoidGame({
             block.width,
             block.height,
           );
+        } else {
+          drawBrick(ctx, block);
         }
       }
 
@@ -376,15 +550,20 @@ export default function ArkanoidGame({
         }
       }
 
-      drawSprite(
-        ctx,
-        "paddle",
-        paddle.x,
-        paddle.y,
-        paddle.width,
-        paddle.height,
-      );
-      drawSprite(ctx, "ball", ball.x, ball.y, ball.size, ball.size);
+      if (s === "classic") {
+        drawSprite(
+          ctx,
+          "paddle",
+          paddle.x,
+          paddle.y,
+          paddle.width,
+          paddle.height,
+        );
+        drawSprite(ctx, "ball", ball.x, ball.y, ball.size, ball.size);
+      } else {
+        drawPaddleCanvas(ctx, paddle);
+        drawBallCanvas(ctx, ball);
+      }
     }
 
     let rafId: number;

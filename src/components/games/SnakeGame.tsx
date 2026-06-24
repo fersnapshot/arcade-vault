@@ -20,6 +20,24 @@ const H = ROWS * CELL; // 600
 const TICK_MS = [0, 200, 175, 150, 130, 110, 90, 75, 60, 50];
 const POINTS_PER_LEVEL = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
 
+export type SkinId = "classic" | "neon" | "retro";
+
+// colors[0] = vacío (null), colors[1] = cabeza, colors[2] = cuerpo base
+const SKINS: Record<SkinId, { name: string; colors: (string | null)[] }> = {
+  classic: {
+    name: "Classic",
+    colors: [null, "#00ff44", "#22cc44"],
+  },
+  neon: {
+    name: "Neon",
+    colors: [null, "#00ffaa", "#00ff55"],
+  },
+  retro: {
+    name: "Retro",
+    colors: [null, "#a8e63d", "#5a9e1a"],
+  },
+};
+
 export interface SnakeRef {
   restart: (startLevel?: number) => void;
   togglePause: () => void;
@@ -27,6 +45,7 @@ export interface SnakeRef {
 
 interface Props {
   startLevel?: number;
+  skin?: SkinId;
   onScore: (score: number) => void;
   onLevel: (level: number) => void;
   onGameOver: (finalScore: number) => void;
@@ -36,6 +55,7 @@ interface Props {
 
 export default function SnakeGame({
   startLevel = 1,
+  skin = "classic",
   onScore,
   onLevel,
   onGameOver,
@@ -47,9 +67,11 @@ export default function SnakeGame({
   const initialLevelRef = useRef(startLevel);
   const pausedRef = useRef(false);
   const cbRef = useRef({ onScore, onLevel, onGameOver, onPause });
+  const skinRef = useRef<SkinId>(skin ?? "classic");
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLevel, onGameOver, onPause };
+    skinRef.current = skin ?? "classic";
   });
 
   useImperativeHandle(ref, () => ({
@@ -71,6 +93,120 @@ export default function SnakeGame({
     fruitsImg.src = fruitsPng.src;
 
     type Cell = { x: number; y: number };
+
+    // ── Funciones de dibujo por skin ──────────────────────────────────────
+
+    function drawSegmentClassic(
+      x: number,
+      y: number,
+      color: string,
+      padding: number,
+    ) {
+      ctx.fillStyle = color;
+      ctx.fillRect(
+        x * CELL + padding,
+        y * CELL + padding,
+        CELL - padding * 2,
+        CELL - padding * 2,
+      );
+    }
+
+    function drawSegmentNeon(
+      x: number,
+      y: number,
+      color: string,
+      padding: number,
+    ) {
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = color;
+      ctx.fillRect(
+        x * CELL + padding,
+        y * CELL + padding,
+        CELL - padding * 2,
+        CELL - padding * 2,
+      );
+      // Inner white highlight
+      ctx.shadowBlur = 4;
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      const inner = CELL * 0.3;
+      ctx.fillRect(
+        x * CELL + CELL * 0.35,
+        y * CELL + CELL * 0.35,
+        inner,
+        inner,
+      );
+      ctx.shadowBlur = 0;
+    }
+
+    function drawSegmentRetro(
+      x: number,
+      y: number,
+      color: string,
+      padding: number,
+    ) {
+      ctx.fillStyle = color;
+      ctx.fillRect(
+        x * CELL + padding,
+        y * CELL + padding,
+        CELL - padding * 2,
+        CELL - padding * 2,
+      );
+      // Brightness band at top
+      ctx.fillStyle = "rgba(255,255,255,0.28)";
+      ctx.fillRect(
+        x * CELL + padding,
+        y * CELL + padding,
+        CELL - padding * 2,
+        4,
+      );
+    }
+
+    function drawSegment(
+      x: number,
+      y: number,
+      colorIndex: number,
+      padding: number,
+      fadePct?: number,
+    ) {
+      const palette = SKINS[skinRef.current].colors;
+      let baseColor = palette[colorIndex] as string;
+
+      // Para el cuerpo (colorIndex 2) aplicamos fade HSL en classic/retro,
+      // y un fade de opacidad en neon.
+      if (colorIndex === 2 && fadePct !== undefined) {
+        const s = skinRef.current;
+        if (s === "neon") {
+          // fade via globalAlpha
+          ctx.globalAlpha = Math.max(0.25, fadePct);
+          drawSegmentNeon(x, y, baseColor, padding);
+          ctx.globalAlpha = 1;
+          return;
+        } else if (s === "retro") {
+          // darken via hsl overlay
+          baseColor = palette[2] as string;
+          // usamos globalAlpha para simular fade
+          ctx.globalAlpha = Math.max(0.3, fadePct);
+          drawSegmentRetro(x, y, baseColor, padding);
+          ctx.globalAlpha = 1;
+          return;
+        } else {
+          // classic: fade via globalAlpha
+          ctx.globalAlpha = Math.max(0.3, fadePct);
+          drawSegmentClassic(x, y, baseColor, padding);
+          ctx.globalAlpha = 1;
+          return;
+        }
+      }
+
+      const s = skinRef.current;
+      if (s === "neon") drawSegmentNeon(x, y, baseColor, padding);
+      else if (s === "retro") drawSegmentRetro(x, y, baseColor, padding);
+      else drawSegmentClassic(x, y, baseColor, padding);
+      ctx.shadowBlur = 0;
+    }
+
+    // ── Lógica del juego ──────────────────────────────────────────────────
 
     let snake: Cell[];
     let dir: Cell;
@@ -190,15 +326,12 @@ export default function SnakeGame({
       for (let i = snake.length - 1; i >= 0; i--) {
         const seg = snake[i]!;
         const isHead = i === 0;
-        const fade = Math.max(20, 50 - i * 0.4);
-        ctx.fillStyle = isHead ? "#00ff44" : `hsl(130, 80%, ${fade}%)`;
-        const p = isHead ? 1 : 2;
-        ctx.fillRect(
-          seg.x * CELL + p,
-          seg.y * CELL + p,
-          CELL - p * 2,
-          CELL - p * 2,
-        );
+        if (isHead) {
+          drawSegment(seg.x, seg.y, 1, 1);
+        } else {
+          const fadePct = Math.max(0.25, 1 - i * 0.008);
+          drawSegment(seg.x, seg.y, 2, 2, fadePct);
+        }
       }
 
       // Fruit sprite

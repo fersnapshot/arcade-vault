@@ -3,12 +3,26 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import SnakeGame, { type SnakeRef } from "@/components/games/SnakeGame";
+import SnakeGame, {
+  type SnakeRef,
+  type SkinId,
+} from "@/components/games/SnakeGame";
 import { saveScore } from "./actions";
 
 type GameState = "selecting" | "playing" | "paused" | "over";
 
 const MAX_LEVEL = 9;
+
+const SKINS: { id: SkinId; label: string }[] = [
+  { id: "classic", label: "CLASSIC" },
+  { id: "neon", label: "NEON" },
+  { id: "retro", label: "RETRO" },
+];
+
+function getInitialSkin(): SkinId {
+  if (typeof window === "undefined") return "classic";
+  return (localStorage.getItem("snake-skin") as SkinId) ?? "classic";
+}
 
 export default function SnakePage() {
   const router = useRouter();
@@ -16,6 +30,7 @@ export default function SnakePage() {
 
   const [gameState, setGameState] = useState<GameState>("selecting");
   const [selectedLevel, setSelectedLevel] = useState(1);
+  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
 
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -23,6 +38,11 @@ export default function SnakePage() {
   const [playerName, setPlayerName] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  function handleSkinChange(s: SkinId) {
+    setSkin(s);
+    localStorage.setItem("snake-skin", s);
+  }
 
   function handleStart() {
     setScore(0);
@@ -70,6 +90,24 @@ export default function SnakePage() {
           <span className="l">NIVEL</span>
           <span className="v">LV.{level}</span>
         </div>
+
+        {/* Skin selector */}
+        <div className="hud-stat" style={{ gap: 4 }}>
+          <span className="l">SKIN</span>
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {SKINS.map((s) => (
+              <button
+                key={s.id}
+                className={`btn${skin === s.id ? " pulse" : " ghost"}`}
+                style={{ fontSize: 9, padding: "2px 6px" }}
+                onClick={() => handleSkinChange(s.id)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="hud-actions">
           <button
             className="btn"
@@ -159,6 +197,7 @@ export default function SnakePage() {
             <SnakeGame
               ref={gameRef}
               startLevel={selectedLevel}
+              skin={skin}
               onScore={setScore}
               onLevel={setLevel}
               onPause={(p) => setGameState(p ? "paused" : "playing")}

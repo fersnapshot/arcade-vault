@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ArkanoidGame, {
   type ArkanoidRef,
+  type SkinId,
 } from "@/components/games/ArkanoidGame";
 import { saveScore } from "./actions";
 
@@ -12,12 +13,24 @@ type GameState = "selecting" | "playing" | "paused" | "over";
 
 const MAX_LEVELS = 10;
 
+const SKINS: { id: SkinId; label: string }[] = [
+  { id: "classic", label: "CLASSIC" },
+  { id: "neon", label: "NEON" },
+  { id: "retro", label: "RETRO" },
+];
+
+function getInitialSkin(): SkinId {
+  if (typeof window === "undefined") return "classic";
+  return (localStorage.getItem("arkanoid-skin") as SkinId) ?? "classic";
+}
+
 export default function ArkanoidPage() {
   const router = useRouter();
   const gameRef = useRef<ArkanoidRef>(null);
 
   const [gameState, setGameState] = useState<GameState>("selecting");
   const [selectedLevel, setSelectedLevel] = useState(1);
+  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
 
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
@@ -27,6 +40,11 @@ export default function ArkanoidPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [muted, setMuted] = useState(false);
+
+  function handleSkinChange(s: SkinId) {
+    setSkin(s);
+    localStorage.setItem("arkanoid-skin", s);
+  }
 
   function handleStart() {
     setScore(0);
@@ -76,6 +94,23 @@ export default function ArkanoidPage() {
           <span className="l">NIVEL</span>
           <span className="v">LV.{level}</span>
         </div>
+        {/* Skin selector */}
+        <div className="hud-stat" style={{ gap: 4 }}>
+          <span className="l">SKIN</span>
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {SKINS.map((s) => (
+              <button
+                key={s.id}
+                className={`btn${skin === s.id ? " pulse" : " ghost"}`}
+                style={{ fontSize: 9, padding: "2px 6px" }}
+                onClick={() => handleSkinChange(s.id)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="hud-actions">
           <button
             className="btn"
@@ -172,6 +207,7 @@ export default function ArkanoidPage() {
             <ArkanoidGame
               ref={gameRef}
               initialLevel={selectedLevel}
+              skin={skin}
               onScore={setScore}
               onLives={setLives}
               onLevel={setLevel}
