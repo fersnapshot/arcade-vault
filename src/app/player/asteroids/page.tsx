@@ -7,7 +7,15 @@ import AsteroidsGame, {
   type AsteroidsRef,
   type SkinId,
 } from "@/components/games/AsteroidsGame";
+import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
+
+const GAMEPAD_KEYMAP = {
+  left: "ArrowLeft",
+  right: "ArrowRight",
+  up: "ArrowUp",
+  actionA: " ",
+};
 
 type GameState = "playing" | "paused" | "over";
 
@@ -165,6 +173,16 @@ export default function AsteroidsPage() {
           <span>AV-2026</span>
         </div>
       </div>
+
+      {/* Virtual gamepad (mobile only) */}
+      <VirtualGamepad
+        keyMap={GAMEPAD_KEYMAP}
+        onPause={handlePauseClick}
+        onExit={() => router.push("/games")}
+        skin={skin}
+        skins={SKINS}
+        onSkinChange={(s) => handleSkinChange(s as SkinId)}
+      />
 
       {/* Game over modal */}
       {gameState === "over" && (

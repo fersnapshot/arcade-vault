@@ -7,7 +7,15 @@ import SnakeGame, {
   type SnakeRef,
   type SkinId,
 } from "@/components/games/SnakeGame";
+import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
+
+const GAMEPAD_KEYMAP = {
+  up: "ArrowUp",
+  down: "ArrowDown",
+  left: "ArrowLeft",
+  right: "ArrowRight",
+};
 
 type GameState = "selecting" | "playing" | "paused" | "over";
 
@@ -243,6 +251,16 @@ export default function SnakePage() {
           <span>AV-2026</span>
         </div>
       </div>
+
+      {/* Virtual gamepad (mobile only) */}
+      <VirtualGamepad
+        keyMap={GAMEPAD_KEYMAP}
+        onPause={handlePauseClick}
+        onExit={() => router.push("/games")}
+        skin={skin}
+        skins={SKINS}
+        onSkinChange={(s) => handleSkinChange(s as SkinId)}
+      />
 
       {/* Game over modal */}
       {gameState === "over" && (
