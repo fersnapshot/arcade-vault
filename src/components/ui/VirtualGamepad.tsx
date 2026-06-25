@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./VirtualGamepad.module.css";
+
 interface GamepadKeyMap {
   up?: string;
   down?: string;
@@ -51,22 +53,11 @@ function keyHandlers(keyName: string) {
   };
 }
 
-function DpadButton({
-  label,
-  keyName,
-  className,
-}: {
-  label: string;
-  keyName?: string;
-  className?: string;
-}) {
-  if (!keyName) return <div className={className} />;
+function DpadButton({ label, keyName }: { label: string; keyName?: string }) {
+  if (!keyName) return <div />;
 
   return (
-    <button
-      className={`flex items-center justify-center bg-gray-700 border border-gray-500 text-white text-lg font-bold select-none active:bg-gray-500 ${className ?? ""}`}
-      {...keyHandlers(keyName)}
-    >
+    <button className={styles.dp} {...keyHandlers(keyName)}>
       {label}
     </button>
   );
@@ -81,47 +72,51 @@ export function VirtualGamepad({
   onSkinChange,
 }: VirtualGamepadProps) {
   return (
-    <div className="md:hidden w-full bg-gray-900 border-t border-gray-700 p-3 flex flex-col gap-3">
+    <div className={`md:hidden ${styles.gp}`}>
       {/* D-pad + Action buttons row */}
-      <div className="flex items-center justify-between">
+      <div className={styles.gpBody}>
         {/* D-pad */}
-        <div className="grid grid-cols-3 grid-rows-3 w-36 h-36">
+        <div className={styles.dpWrapper}>
           <div />
-          <DpadButton label="▲" keyName={keyMap.up} className="rounded-t" />
+          <DpadButton label="▲" keyName={keyMap.up} />
           <div />
-          <DpadButton label="◀" keyName={keyMap.left} className="rounded-l" />
-          <div className="bg-gray-800 border border-gray-600 rounded" />
-          <DpadButton label="▶" keyName={keyMap.right} className="rounded-r" />
+          <DpadButton label="◀" keyName={keyMap.left} />
+          <div className={styles.dpHub}>
+            <span className={styles.dpHubGem} />
+          </div>
+          <DpadButton label="▶" keyName={keyMap.right} />
           <div />
-          <DpadButton label="▼" keyName={keyMap.down} className="rounded-b" />
+          <DpadButton label="▼" keyName={keyMap.down} />
           <div />
         </div>
 
         {/* Action buttons */}
-        <div className="flex flex-col gap-3 items-end">
+        <div className={styles.abWrapper}>
           {keyMap.actionB && (
             <button
-              className="w-14 h-14 rounded-full bg-blue-700 border-2 border-blue-400 text-white font-bold text-sm select-none active:bg-blue-500"
+              className={`${styles.ab} ${styles.abB}`}
               {...keyHandlers(keyMap.actionB)}
             >
-              B
+              <span className={styles.abRing} />
+              <span className={styles.abLetter}>B</span>
             </button>
           )}
           {keyMap.actionA && (
             <button
-              className="w-14 h-14 rounded-full bg-red-700 border-2 border-red-400 text-white font-bold text-sm select-none active:bg-red-500"
+              className={`${styles.ab} ${styles.abA}`}
               {...keyHandlers(keyMap.actionA)}
             >
-              A
+              <span className={styles.abRing} />
+              <span className={styles.abLetter}>A</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Bottom row: Pause + Skin selector */}
-      <div className="flex items-center justify-between gap-2">
+      {/* Bottom row: Pause + Skin selector + Exit */}
+      <div className={styles.bottomRow}>
         <button
-          className="px-4 py-2 bg-yellow-700 border border-yellow-500 text-white text-xs font-bold rounded select-none active:bg-yellow-500"
+          className={styles.metaBtn}
           onTouchStart={(e) => e.preventDefault()}
           onClick={onPause}
         >
@@ -130,7 +125,7 @@ export function VirtualGamepad({
 
         {skins.length > 0 && (
           <select
-            className="flex-1 bg-gray-800 border border-gray-600 text-white text-xs rounded px-2 py-2"
+            className={styles.skinSelect}
             value={skin}
             onChange={(e) => onSkinChange(e.target.value)}
           >
@@ -144,7 +139,7 @@ export function VirtualGamepad({
 
         {onExit && (
           <button
-            className="px-4 py-2 bg-red-800 border border-red-600 text-white text-xs font-bold rounded select-none active:bg-red-600"
+            className={styles.metaBtn}
             onTouchStart={(e) => e.preventDefault()}
             onClick={onExit}
           >
