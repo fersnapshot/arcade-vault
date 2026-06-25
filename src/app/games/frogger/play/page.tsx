@@ -5,8 +5,16 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FroggerRef, type SkinId } from "@/components/games/FroggerGame";
+import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
 import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
+
+const GAMEPAD_KEYMAP = {
+  up: "ArrowUp",
+  down: "ArrowDown",
+  left: "ArrowLeft",
+  right: "ArrowRight",
+} as const;
 
 const FroggerGame = dynamic(() => import("@/components/games/FroggerGame"), {
   ssr: false,
@@ -173,6 +181,16 @@ export default function FroggerPlayPage() {
           <span>AV-2026</span>
         </div>
       </div>
+
+      {/* Virtual gamepad (mobile only) */}
+      <VirtualGamepad
+        keyMap={GAMEPAD_KEYMAP}
+        onPause={handlePauseClick}
+        onExit={() => router.push("/games")}
+        skin={skin}
+        skins={SKINS}
+        onSkinChange={(s) => handleSkinChange(s as SkinId)}
+      />
 
       {/* Game over modal */}
       {gameState === "over" && (
