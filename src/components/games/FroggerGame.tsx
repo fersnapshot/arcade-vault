@@ -101,8 +101,9 @@ const SKINS: Record<SkinId, SkinPalette> = {
 const COLS = 16;
 const ROWS = 14;
 const CELL = 40;
+const HUD_H = 28;
 const CANVAS_W = COLS * CELL; // 640
-const CANVAS_H = ROWS * CELL; // 560
+const CANVAS_H = ROWS * CELL + HUD_H; // 588
 
 const ROW_GOALS = 0;
 const ROW_RIVER_TOP = 1;
@@ -115,10 +116,8 @@ const ROW_START = 13;
 const GOAL_COLS = [1, 4, 7, 10, 13];
 
 const JUMP_MS = 120;
-const ROUND_TIME_BASE = 15_000;
+const ROUND_TIME_BASE = 25_000;
 const ROUND_TIME_MIN = 8_000;
-const TURTLE_VISIBLE_MS = 3_000;
-const TURTLE_SUBMERGE_MS = 1_500;
 
 const PTS_ADVANCE = 10;
 const PTS_GOAL = 50;
@@ -533,19 +532,6 @@ export default function FroggerGame({
           const ew = e.width * CELL;
           if (lane.dir === 1 && e.col > CANVAS_W) e.col = -ew;
           if (lane.dir === -1 && e.col < -ew) e.col = CANVAS_W;
-
-          if (e.type === "turtle") {
-            e.submergeTimer! += dt;
-            const threshold =
-              e.submergePhase === "visible"
-                ? TURTLE_VISIBLE_MS
-                : TURTLE_SUBMERGE_MS;
-            if (e.submergeTimer! >= threshold) {
-              e.submergeTimer = 0;
-              e.submerged = !e.submerged;
-              e.submergePhase = e.submerged ? "submerging" : "visible";
-            }
-          }
         }
       }
 
@@ -963,7 +949,7 @@ export default function FroggerGame({
 
       // Background zones
       for (let r = 0; r < ROWS; r++) {
-        const y = r * CELL;
+        const y = HUD_H + r * CELL;
         if (r === ROW_GOALS) {
           ctx.fillStyle = pal.bg;
         } else if (r >= ROW_RIVER_TOP && r <= ROW_RIVER_BOT) {
@@ -991,7 +977,7 @@ export default function FroggerGame({
       // Goal slots
       for (let i = 0; i < GOAL_COLS.length; i++) {
         const gx = GOAL_COLS[i]! * CELL;
-        const gy = ROW_GOALS * CELL;
+        const gy = HUD_H + ROW_GOALS * CELL;
         if (goals[i]) {
           ctx.fillStyle = pal.goalFilled;
           ctx.fillRect(gx + 2, gy + 2, 2 * CELL - 4, CELL - 4);
@@ -1012,7 +998,7 @@ export default function FroggerGame({
       // River entities
       for (const lane of lanes) {
         if (lane.row < ROW_RIVER_TOP || lane.row > ROW_RIVER_BOT) continue;
-        const y = lane.row * CELL;
+        const y = HUD_H + lane.row * CELL;
         for (const e of lane.entities) {
           const x = e.col;
           const w = e.width * CELL;
@@ -1033,7 +1019,7 @@ export default function FroggerGame({
       // Road entities
       for (const lane of lanes) {
         if (lane.row < ROW_ROAD_TOP || lane.row > ROW_ROAD_BOT) continue;
-        const y = lane.row * CELL;
+        const y = HUD_H + lane.row * CELL;
         for (const e of lane.entities) {
           const x = e.col;
           const w = e.width * CELL;
@@ -1055,18 +1041,19 @@ export default function FroggerGame({
           (frog.fromCol + (frog.targetCol - frog.fromCol) * t) * CELL +
           CELL / 2;
         fy =
+          HUD_H +
           (frog.fromRow + (frog.targetRow - frog.fromRow) * t) * CELL +
           CELL / 2;
       } else {
         fx = frog.col * CELL + CELL / 2;
-        fy = frog.row * CELL + CELL / 2;
+        fy = HUD_H + frog.row * CELL + CELL / 2;
       }
       drawFrog(fx, fy);
       ctx.shadowBlur = 0;
 
-      // HUD overlay
-      ctx.fillStyle = "rgba(0,0,0,0.6)";
-      ctx.fillRect(0, 0, CANVAS_W, 28);
+      // HUD overlay — franja dedicada arriba del juego
+      ctx.fillStyle = "rgba(0,0,0,0.75)";
+      ctx.fillRect(0, 0, CANVAS_W, HUD_H);
 
       ctx.font = "bold 12px monospace";
       ctx.textBaseline = "top";

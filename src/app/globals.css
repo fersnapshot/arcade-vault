@@ -830,6 +830,58 @@ a {
   filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.5));
 }
 
+.cover-frogger {
+  background: linear-gradient(
+    180deg,
+    #001a0a 0%,
+    #002b10 30%,
+    #1a1000 55%,
+    #0d0d0d 100%
+  );
+}
+.cover-frogger::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* water lanes — top */
+    repeating-linear-gradient(
+        90deg,
+        rgba(0, 180, 255, 0.25) 0 30px,
+        transparent 30px 50px
+      )
+      0 15%/100% 28% no-repeat,
+    /* road lanes — bottom */
+    repeating-linear-gradient(
+        90deg,
+        rgba(255, 220, 0, 0.2) 0 2px,
+        transparent 2px 40px
+      )
+      0 62%/100% 24% no-repeat,
+    /* road surface */
+    linear-gradient(rgba(40, 40, 40, 0.6), rgba(40, 40, 40, 0.6)) 0 55%/100% 38%
+      no-repeat,
+    /* frog body */
+    radial-gradient(ellipse at 50% 50%, #22cc44 0 10px, transparent 11px),
+    /* frog eyes */
+    radial-gradient(circle at 46% 47%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 54% 47%, #fff 0 3px, transparent 4px);
+  filter: drop-shadow(0 0 6px rgba(34, 204, 68, 0.5));
+}
+.cover-frogger::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* lily pad */
+    radial-gradient(ellipse at 50% 88%, #1a8a2a 0 12px, transparent 13px),
+    /* log in water */
+    linear-gradient(rgba(139, 90, 43, 0.6), rgba(139, 90, 43, 0.6)) 10% 22%/35%
+      8% no-repeat,
+    linear-gradient(rgba(139, 90, 43, 0.6), rgba(139, 90, 43, 0.6)) 58% 28%/28%
+      8% no-repeat;
+}
+
 .cover-duelo {
   background: #0a0a18;
 }
