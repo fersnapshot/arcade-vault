@@ -4,14 +4,21 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FroggerRef } from "@/components/games/FroggerGame";
+import { type FroggerRef, type SkinId } from "@/components/games/FroggerGame";
 import { saveScore } from "./actions";
+import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
 
 const FroggerGame = dynamic(() => import("@/components/games/FroggerGame"), {
   ssr: false,
 });
 
 type GameState = "playing" | "paused" | "over";
+
+const SKINS: { id: SkinId; label: string }[] = [
+  { id: "classic", label: "CLASSIC" },
+  { id: "neon", label: "NEON" },
+  { id: "retro", label: "RETRO" },
+];
 
 export default function FroggerPlayPage() {
   const router = useRouter();
@@ -32,6 +39,11 @@ export default function FroggerPlayPage() {
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const { skin, handleSkinChange } = useSkinLocalStorage<SkinId>(
+    "frogger-skin",
+    "classic",
+  );
 
   function handlePauseClick() {
     if (gameState === "over") return;
@@ -79,6 +91,23 @@ export default function FroggerPlayPage() {
           <span className="v">LV.{level}</span>
         </div>
 
+        {/* Skin selector */}
+        <div className="hud-stat" style={{ gap: 4 }}>
+          <span className="l">SKIN</span>
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {SKINS.map((s) => (
+              <button
+                key={s.id}
+                className={`btn${skin === s.id ? " pulse" : " ghost"}`}
+                style={{ fontSize: 9, padding: "2px 6px" }}
+                onClick={() => handleSkinChange(s.id)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="hud-actions">
           <button
             className="btn"
@@ -100,6 +129,7 @@ export default function FroggerPlayPage() {
             key={gameKey}
             ref={gameRef}
             paused={gameState === "paused"}
+            skin={skin}
             onScoreChange={setScore}
             onLivesChange={setLives}
             onLevelChange={setLevel}
