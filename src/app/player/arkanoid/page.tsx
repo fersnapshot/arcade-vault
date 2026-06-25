@@ -9,6 +9,7 @@ import ArkanoidGame, {
 } from "@/components/games/ArkanoidGame";
 import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
+import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
 
 const GAMEPAD_KEYMAP = {
   left: "ArrowLeft",
@@ -25,18 +26,12 @@ const SKINS: { id: SkinId; label: string }[] = [
   { id: "retro", label: "RETRO" },
 ];
 
-function getInitialSkin(): SkinId {
-  if (typeof window === "undefined") return "classic";
-  return (localStorage.getItem("arkanoid-skin") as SkinId) ?? "classic";
-}
-
 export default function ArkanoidPage() {
   const router = useRouter();
   const gameRef = useRef<ArkanoidRef>(null);
 
   const [gameState, setGameState] = useState<GameState>("selecting");
   const [selectedLevel, setSelectedLevel] = useState(1);
-  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
 
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
@@ -47,10 +42,8 @@ export default function ArkanoidPage() {
   const [saved, setSaved] = useState(false);
   const [muted, setMuted] = useState(false);
 
-  function handleSkinChange(s: SkinId) {
-    setSkin(s);
-    localStorage.setItem("arkanoid-skin", s);
-  }
+  const { skin, handleSkinChange } =
+    useSkinLocalStorage<SkinId>("arkanoid-skin");
 
   function handleStart() {
     setScore(0);

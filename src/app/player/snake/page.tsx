@@ -9,6 +9,7 @@ import SnakeGame, {
 } from "@/components/games/SnakeGame";
 import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
+import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
 
 const GAMEPAD_KEYMAP = {
   up: "ArrowUp",
@@ -27,18 +28,12 @@ const SKINS: { id: SkinId; label: string }[] = [
   { id: "retro", label: "RETRO" },
 ];
 
-function getInitialSkin(): SkinId {
-  if (typeof window === "undefined") return "classic";
-  return (localStorage.getItem("snake-skin") as SkinId) ?? "classic";
-}
-
 export default function SnakePage() {
   const router = useRouter();
   const gameRef = useRef<SnakeRef>(null);
 
   const [gameState, setGameState] = useState<GameState>("selecting");
   const [selectedLevel, setSelectedLevel] = useState(1);
-  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
 
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -47,10 +42,7 @@ export default function SnakePage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  function handleSkinChange(s: SkinId) {
-    setSkin(s);
-    localStorage.setItem("snake-skin", s);
-  }
+  const { skin, handleSkinChange } = useSkinLocalStorage<SkinId>("snake-skin");
 
   function handleStart() {
     setScore(0);

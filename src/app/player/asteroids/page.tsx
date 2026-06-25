@@ -9,6 +9,7 @@ import AsteroidsGame, {
 } from "@/components/games/AsteroidsGame";
 import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
+import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
 
 const GAMEPAD_KEYMAP = {
   left: "ArrowLeft",
@@ -25,11 +26,6 @@ const SKINS: { id: SkinId; label: string }[] = [
   { id: "retro", label: "RETRO" },
 ];
 
-function getInitialSkin(): SkinId {
-  if (typeof window === "undefined") return "classic";
-  return (localStorage.getItem("asteroids-skin") as SkinId) ?? "classic";
-}
-
 export default function AsteroidsPage() {
   const router = useRouter();
   const gameRef = useRef<AsteroidsRef>(null);
@@ -42,12 +38,9 @@ export default function AsteroidsPage() {
   const [playerName, setPlayerName] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
 
-  function handleSkinChange(s: SkinId) {
-    setSkin(s);
-    localStorage.setItem("asteroids-skin", s);
-  }
+  const { skin, handleSkinChange } =
+    useSkinLocalStorage<SkinId>("asteroids-skin");
 
   function handlePauseClick() {
     gameRef.current?.togglePause();

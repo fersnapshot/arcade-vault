@@ -9,6 +9,7 @@ import TetrisGame, {
 } from "@/components/games/TetrisGame";
 import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
+import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
 
 const GAMEPAD_KEYMAP = {
   up: "ArrowUp",
@@ -28,18 +29,12 @@ const SKINS: { id: SkinId; label: string }[] = [
   { id: "pixel", label: "PIXEL" },
 ];
 
-function getInitialSkin(): SkinId {
-  if (typeof window === "undefined") return "retro";
-  return (localStorage.getItem("tetris-skin") as SkinId) ?? "retro";
-}
-
 export default function TetrisPage() {
   const router = useRouter();
   const gameRef = useRef<TetrisRef>(null);
 
   const [gameState, setGameState] = useState<GameState>("selecting");
   const [selectedLevel, setSelectedLevel] = useState(1);
-  const [skin, setSkin] = useState<SkinId>(getInitialSkin);
 
   const [score, setScore] = useState(0);
   const [lines, setLines] = useState(0);
@@ -49,10 +44,10 @@ export default function TetrisPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  function handleSkinChange(s: SkinId) {
-    setSkin(s);
-    localStorage.setItem("tetris-skin", s);
-  }
+  const { skin, handleSkinChange } = useSkinLocalStorage<SkinId>(
+    "tetris-skin",
+    "retro",
+  );
 
   function handleStart() {
     setScore(0);
