@@ -1,6 +1,6 @@
 # SPEC 10 — Soporte de controles táctiles en móvil
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 05-asteroids-game, 07-tetris-game, 08-arkanoid-game, 09-snake-game
 - **Date:** 2026-06-24
 - **Objective:** Hacer que los cuatro juegos (Asteroids, Tetris, Arkanoid, Snake)
@@ -109,19 +109,19 @@ Cada página player pasa el `keyMap` específico de su juego.
 
 ## Acceptance criteria
 
-- [ ] En viewport < 768 px, el HUD (score / vidas / nivel) no es visible
-- [ ] En viewport < 768 px, el canvas ocupa el ancho completo de la pantalla
-- [ ] El componente `VirtualGamepad` aparece debajo del canvas solo en móvil;
+- [x] En viewport < 768 px, el HUD (score / vidas / nivel) no es visible
+- [x] En viewport < 768 px, el canvas ocupa el ancho completo de la pantalla
+- [x] El componente `VirtualGamepad` aparece debajo del canvas solo en móvil;
       en desktop no se renderiza
-- [ ] El d-pad emite los eventos de teclado correctos para cada juego:
+- [x] El d-pad emite los eventos de teclado correctos para cada juego:
       Snake (4 flechas), Arkanoid (← →, lanzar), Tetris (← → ↓ ↑, drop),
       Asteroids (← → ↑, disparar, escudo)
-- [ ] Los botones A y B no se muestran si el juego no los necesita (keyMap undefined)
-- [ ] El botón Pausa del gamepad llama a `togglePause()` correctamente
-- [ ] El selector de skin en el gamepad cambia la skin activa igual que en desktop
-- [ ] No hay scroll accidental al usar el d-pad o los botones de acción
-- [ ] En desktop (≥ 768 px), el layout y el HUD no han cambiado
-- [ ] La lógica de gameplay de ningún juego ha sido modificada
+- [x] Los botones A y B no se muestran si el juego no los necesita (keyMap undefined)
+- [x] El botón Pausa del gamepad llama a `togglePause()` correctamente
+- [x] El selector de skin en el gamepad cambia la skin activa igual que en desktop
+- [x] No hay scroll accidental al usar el d-pad o los botones de acción
+- [x] En desktop (≥ 768 px), el layout y el HUD no han cambiado
+- [x] La lógica de gameplay de ningún juego ha sido modificada
 
 ---
 
