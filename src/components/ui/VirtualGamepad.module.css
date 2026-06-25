@@ -334,3 +334,9 @@
   border-color: #00f5ff;
   box-shadow: 0 0 8px rgba(0, 245, 255, 0.3);
 }
+
+@media (min-width: 768px) {
+  .gp {
+    display: none;
+  }
+}

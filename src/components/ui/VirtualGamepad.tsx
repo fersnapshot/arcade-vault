@@ -87,7 +87,7 @@ export function VirtualGamepad({
   onSkinChange,
 }: VirtualGamepadProps) {
   return (
-    <div className={`md:hidden ${styles.gp}`}>
+    <div className={styles.gp}>
       {/* D-pad + Action buttons row */}
       <div className={styles.gpBody}>
         {/* D-pad */}
