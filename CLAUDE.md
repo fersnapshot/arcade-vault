@@ -23,6 +23,7 @@ No se ha configurado ningún ejecutor (motor) de pruebas.
 
 - `/frontend-design` — siempre usar para diseñar la interfaz de usuario.
 - `/spec-game` — diseña el spec para integrar un juego nuevo (con leaderboard) siguiendo el patrón de los specs 05/06. Solo escribe `specs/NN-slug.md`; no implementa. Definido en `.claude/skills/spec-game/`.
+- `/spec-impl-game <NN-slug>` — implementa un spec aprobado y encadena en secuencia estricta: `@skin-designer` (3 skins obligatorias) y luego `@mobile-porter` (soporte móvil). Usar cuando se quiera dejar el juego completamente integrado de una vez.
 
 ## Agentes
 
