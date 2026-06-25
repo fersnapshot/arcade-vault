@@ -53,12 +53,27 @@ function keyHandlers(keyName: string) {
   };
 }
 
-function DpadButton({ label, keyName }: { label: string; keyName?: string }) {
+const DPAD_PATHS = {
+  up: "M12 4 L20 16 L4 16 Z",
+  right: "M8 4 L20 12 L8 20 Z",
+  down: "M4 8 L20 8 L12 20 Z",
+  left: "M16 4 L16 20 L4 12 Z",
+} as const;
+
+function DpadButton({
+  direction,
+  keyName,
+}: {
+  direction: keyof typeof DPAD_PATHS;
+  keyName?: string;
+}) {
   if (!keyName) return <div />;
 
   return (
     <button className={styles.dp} {...keyHandlers(keyName)}>
-      {label}
+      <svg className={styles.dpArrow} viewBox="0 0 24 24">
+        <path d={DPAD_PATHS[direction]} fill="currentColor" />
+      </svg>
     </button>
   );
 }
@@ -78,15 +93,15 @@ export function VirtualGamepad({
         {/* D-pad */}
         <div className={styles.dpWrapper}>
           <div />
-          <DpadButton label="▲" keyName={keyMap.up} />
+          <DpadButton direction="up" keyName={keyMap.up} />
           <div />
-          <DpadButton label="◀" keyName={keyMap.left} />
+          <DpadButton direction="left" keyName={keyMap.left} />
           <div className={styles.dpHub}>
             <span className={styles.dpHubGem} />
           </div>
-          <DpadButton label="▶" keyName={keyMap.right} />
+          <DpadButton direction="right" keyName={keyMap.right} />
           <div />
-          <DpadButton label="▼" keyName={keyMap.down} />
+          <DpadButton direction="down" keyName={keyMap.down} />
           <div />
         </div>
 

@@ -110,6 +110,16 @@
     0 0 16px rgba(0, 245, 255, 0.5);
 }
 
+.dpArrow {
+  width: 22px;
+  height: 22px;
+  transition: filter 140ms;
+}
+
+.dp:active .dpArrow {
+  filter: drop-shadow(0 0 6px #00f5ff) drop-shadow(0 0 12px #00f5ff);
+}
+
 /* D-PAD Hub */
 .dpHub {
   background: radial-gradient(circle at 50% 50%, #181822 0%, #08080d 80%);
