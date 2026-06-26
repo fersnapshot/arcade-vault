@@ -337,9 +337,15 @@ export default function FroggerGame({
 
   useLayoutEffect(() => {
     cbRef.current = { onScoreChange, onLivesChange, onLevelChange, onGameOver };
+  }, [onScoreChange, onLivesChange, onLevelChange, onGameOver]);
+
+  useLayoutEffect(() => {
     pausedRef.current = paused;
+  }, [paused]);
+
+  useLayoutEffect(() => {
     skinRef.current = skin;
-  });
+  }, [skin]);
 
   useImperativeHandle(ref, () => ({
     restart() {
@@ -358,6 +364,7 @@ export default function FroggerGame({
     // ── State ──────────────────────────────────────────────────────────────────
     let frog: Frog;
     let lanes: Lane[];
+    let laneByRow: Map<number, Lane>;
     let goals: boolean[];
     let lives: number;
     let score: number;
@@ -366,6 +373,8 @@ export default function FroggerGame({
     let rowsReached: Set<number>;
     let pendingDir: Direction | null;
     let isOver: boolean;
+    let deathAnim: boolean;
+    let deathTimer: number;
 
     let prevScore = -1;
     let prevLives = -1;
@@ -400,8 +409,11 @@ export default function FroggerGame({
       prevLevel = -1;
       isOver = false;
       pendingDir = null;
+      deathAnim = false;
+      deathTimer = 0;
       goals = [false, false, false, false, false];
       lanes = buildLanes(level);
+      laneByRow = new Map(lanes.map((l) => [l.row, l]));
       roundTimer = getRoundTime(level);
       rowsReached = new Set([ROW_START]);
       frog = makeFrog();
@@ -416,17 +428,11 @@ export default function FroggerGame({
 
     function killFrog() {
       lives -= 1;
-      if (lives <= 0) {
-        lives = 0;
-        isOver = true;
-        cbRef.current.onLivesChange(0);
-        cbRef.current.onGameOver(score);
-        prevLives = 0;
-        return;
-      }
-      cbRef.current.onLivesChange(lives);
-      prevLives = lives;
-      resetFrog();
+      if (lives < 0) lives = 0;
+      deathAnim = true;
+      deathTimer = 0;
+      frog.animating = false;
+      pendingDir = null;
     }
 
     function getSupport(): Entity | null {
@@ -470,6 +476,7 @@ export default function FroggerGame({
             level += 1;
             goals = [false, false, false, false, false];
             lanes = buildLanes(level);
+            laneByRow = new Map(lanes.map((l) => [l.row, l]));
             cbRef.current.onLevelChange(level);
             prevLevel = level;
           }
@@ -525,6 +532,24 @@ export default function FroggerGame({
       if (isOver) return;
       if (pausedRef.current) return;
 
+      if (deathAnim) {
+        deathTimer += dt;
+        if (deathTimer >= 700) {
+          deathAnim = false;
+          if (lives <= 0) {
+            isOver = true;
+            cbRef.current.onLivesChange(0);
+            cbRef.current.onGameOver(score);
+            prevLives = 0;
+          } else {
+            cbRef.current.onLivesChange(lives);
+            prevLives = lives;
+            resetFrog();
+          }
+        }
+        return;
+      }
+
       // 1. Move entities + turtle submersion
       for (const lane of lanes) {
         for (const e of lane.entities) {
@@ -556,7 +581,7 @@ export default function FroggerGame({
           fireCallbacks();
           return;
         }
-        const lane = lanes.find((l) => l.row === frog.row)!;
+        const lane = laneByRow.get(frog.row)!;
         frog.col += (lane.speed * lane.dir * dt) / (16 * CELL);
         if (frog.col < 0 || frog.col >= COLS) {
           killFrog();
@@ -934,7 +959,50 @@ export default function FroggerGame({
       ctx.fill();
     }
 
-    function drawFrog(fx: number, fy: number) {
+    function drawLegs(
+      fx: number,
+      fy: number,
+      animProg: number,
+      dx: number,
+      dy: number,
+    ) {
+      const pal = SKINS[skinRef.current];
+      const extend = Math.sin(Math.min(animProg, 1) * Math.PI) * 9;
+      if (skinRef.current === "neon") {
+        ctx.shadowColor = pal.frog;
+        ctx.shadowBlur = 8;
+      }
+      ctx.fillStyle = pal.frog;
+      // back legs push opposite to jump; front legs reach toward jump
+      const feet = [
+        { ox: -10, oy: 7, back: true },
+        { ox: 10, oy: 7, back: true },
+        { ox: -10, oy: -5, back: false },
+        { ox: 10, oy: -5, back: false },
+      ];
+      for (const f of feet) {
+        const push = f.back ? -extend : extend * 0.55;
+        ctx.beginPath();
+        ctx.arc(
+          fx + f.ox + dx * push,
+          fy + f.oy + dy * push,
+          4,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+      }
+      if (skinRef.current === "neon") ctx.shadowBlur = 0;
+    }
+
+    function drawFrog(
+      fx: number,
+      fy: number,
+      animProg: number,
+      dx: number,
+      dy: number,
+    ) {
+      if (animProg > 0) drawLegs(fx, fy, animProg, dx, dy);
       const s = skinRef.current;
       if (s === "neon") drawFrogNeon(fx, fy);
       else if (s === "retro") drawFrogRetro(fx, fy);
@@ -1035,8 +1103,11 @@ export default function FroggerGame({
       // Frog
       let fx: number;
       let fy: number;
+      const animProg = frog.animating ? Math.min(frog.animT / JUMP_MS, 1) : 0;
+      const jumpDx = frog.targetCol - frog.fromCol;
+      const jumpDy = frog.targetRow - frog.fromRow;
       if (frog.animating) {
-        const t = Math.min(frog.animT / JUMP_MS, 1);
+        const t = animProg;
         fx =
           (frog.fromCol + (frog.targetCol - frog.fromCol) * t) * CELL +
           CELL / 2;
@@ -1048,7 +1119,31 @@ export default function FroggerGame({
         fx = frog.col * CELL + CELL / 2;
         fy = HUD_H + frog.row * CELL + CELL / 2;
       }
-      drawFrog(fx, fy);
+      if (deathAnim) {
+        const visible = Math.floor(deathTimer / 90) % 2 === 0;
+        if (visible) {
+          ctx.fillStyle = "#ff2222";
+          ctx.beginPath();
+          ctx.ellipse(fx, fy, 14, 11, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "white";
+          ctx.beginPath();
+          ctx.arc(fx - 5, fy - 8, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(fx + 5, fy - 8, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#000";
+          ctx.beginPath();
+          ctx.arc(fx - 5, fy - 8, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(fx + 5, fy - 8, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        drawFrog(fx, fy, animProg, jumpDx, jumpDy);
+      }
       ctx.shadowBlur = 0;
 
       // HUD overlay — franja dedicada arriba del juego
@@ -1093,6 +1188,10 @@ export default function FroggerGame({
         restartRef.current = false;
         init();
       }
+      if (pausedRef.current) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
       const dt = lastTs === 0 ? 16 : Math.min(ts - lastTs, 100);
       lastTs = ts;
       update(dt);
@@ -1122,12 +1221,12 @@ export default function FroggerGame({
       }
     }
 
-    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", onKeyDown);
     init();
     rafId = requestAnimationFrame(loop);
 
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keydown", onKeyDown);
       cancelAnimationFrame(rafId);
     };
   }, []);
