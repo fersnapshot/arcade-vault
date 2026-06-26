@@ -373,6 +373,8 @@ export default function FroggerGame({
     let rowsReached: Set<number>;
     let pendingDir: Direction | null;
     let isOver: boolean;
+    let deathAnim: boolean;
+    let deathTimer: number;
 
     let prevScore = -1;
     let prevLives = -1;
@@ -407,6 +409,8 @@ export default function FroggerGame({
       prevLevel = -1;
       isOver = false;
       pendingDir = null;
+      deathAnim = false;
+      deathTimer = 0;
       goals = [false, false, false, false, false];
       lanes = buildLanes(level);
       laneByRow = new Map(lanes.map((l) => [l.row, l]));
@@ -424,17 +428,11 @@ export default function FroggerGame({
 
     function killFrog() {
       lives -= 1;
-      if (lives <= 0) {
-        lives = 0;
-        isOver = true;
-        cbRef.current.onLivesChange(0);
-        cbRef.current.onGameOver(score);
-        prevLives = 0;
-        return;
-      }
-      cbRef.current.onLivesChange(lives);
-      prevLives = lives;
-      resetFrog();
+      if (lives < 0) lives = 0;
+      deathAnim = true;
+      deathTimer = 0;
+      frog.animating = false;
+      pendingDir = null;
     }
 
     function getSupport(): Entity | null {
@@ -533,6 +531,24 @@ export default function FroggerGame({
     function update(dt: number) {
       if (isOver) return;
       if (pausedRef.current) return;
+
+      if (deathAnim) {
+        deathTimer += dt;
+        if (deathTimer >= 700) {
+          deathAnim = false;
+          if (lives <= 0) {
+            isOver = true;
+            cbRef.current.onLivesChange(0);
+            cbRef.current.onGameOver(score);
+            prevLives = 0;
+          } else {
+            cbRef.current.onLivesChange(lives);
+            prevLives = lives;
+            resetFrog();
+          }
+        }
+        return;
+      }
 
       // 1. Move entities + turtle submersion
       for (const lane of lanes) {
@@ -1103,7 +1119,31 @@ export default function FroggerGame({
         fx = frog.col * CELL + CELL / 2;
         fy = HUD_H + frog.row * CELL + CELL / 2;
       }
-      drawFrog(fx, fy, animProg, jumpDx, jumpDy);
+      if (deathAnim) {
+        const visible = Math.floor(deathTimer / 90) % 2 === 0;
+        if (visible) {
+          ctx.fillStyle = "#ff2222";
+          ctx.beginPath();
+          ctx.ellipse(fx, fy, 14, 11, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "white";
+          ctx.beginPath();
+          ctx.arc(fx - 5, fy - 8, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(fx + 5, fy - 8, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#000";
+          ctx.beginPath();
+          ctx.arc(fx - 5, fy - 8, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(fx + 5, fy - 8, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        drawFrog(fx, fy, animProg, jumpDx, jumpDy);
+      }
       ctx.shadowBlur = 0;
 
       // HUD overlay — franja dedicada arriba del juego
