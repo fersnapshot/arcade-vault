@@ -358,6 +358,7 @@ export default function FroggerGame({
     // ── State ──────────────────────────────────────────────────────────────────
     let frog: Frog;
     let lanes: Lane[];
+    let laneByRow: Map<number, Lane>;
     let goals: boolean[];
     let lives: number;
     let score: number;
@@ -402,6 +403,7 @@ export default function FroggerGame({
       pendingDir = null;
       goals = [false, false, false, false, false];
       lanes = buildLanes(level);
+      laneByRow = new Map(lanes.map((l) => [l.row, l]));
       roundTimer = getRoundTime(level);
       rowsReached = new Set([ROW_START]);
       frog = makeFrog();
@@ -470,6 +472,7 @@ export default function FroggerGame({
             level += 1;
             goals = [false, false, false, false, false];
             lanes = buildLanes(level);
+            laneByRow = new Map(lanes.map((l) => [l.row, l]));
             cbRef.current.onLevelChange(level);
             prevLevel = level;
           }
@@ -556,7 +559,7 @@ export default function FroggerGame({
           fireCallbacks();
           return;
         }
-        const lane = lanes.find((l) => l.row === frog.row)!;
+        const lane = laneByRow.get(frog.row)!;
         frog.col += (lane.speed * lane.dir * dt) / (16 * CELL);
         if (frog.col < 0 || frog.col >= COLS) {
           killFrog();
@@ -1092,6 +1095,10 @@ export default function FroggerGame({
       if (restartRef.current) {
         restartRef.current = false;
         init();
+      }
+      if (pausedRef.current) {
+        rafId = requestAnimationFrame(loop);
+        return;
       }
       const dt = lastTs === 0 ? 16 : Math.min(ts - lastTs, 100);
       lastTs = ts;
