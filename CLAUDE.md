@@ -31,6 +31,7 @@ No se ha configurado ningún ejecutor (motor) de pruebas.
 - `@game-jam` — dado el **nombre de un juego** (con descripción opcional), genera de forma autónoma **2 specs completos** (variantes A y B) en `specs/game-jam/<game-id>/`, listos para revisar y elegir con `/spec-impl`. No hace preguntas, no implementa código.
 - `@skin-designer` — dado el **id o nombre de un juego ya implementado**, audita su sistema de skins y garantiza que tenga al menos 3: `classic` (default), `neon` y `retro`. Implementa las que falten modificando el componente del juego y su página player. No toca la lógica de gameplay ni la página de detalle.
 - `@mobile-porter` — dado el **id o nombre de un juego ya implementado**, audita y garantiza que sea jugable en móvil (SPEC 10): integra `VirtualGamepad` con el `keyMap` correcto, layout responsive y botones de pausa/salir/skin. No modifica la lógica de gameplay ni `VirtualGamepad.tsx`.
+- `@game-performance-booster` — dado el **id o nombre de un juego ya implementado**, audita su componente canvas y aplica los patrones de rendimiento del SPEC 12: skip draw/update en pausa, lookup O(n) → `Map`, `useLayoutEffect` con deps explícitas y auditoría de callbacks. No toca gameplay ni `VirtualGamepad.tsx`.
 
 ## Arquitectura
 
