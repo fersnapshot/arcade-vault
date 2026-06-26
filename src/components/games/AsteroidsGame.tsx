@@ -415,8 +415,11 @@ export default function AsteroidsGame({
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause };
+  }, [onScore, onLives, onLevel, onGameOver, onPause]);
+
+  useLayoutEffect(() => {
     skinRef.current = skin;
-  });
+  }, [skin]);
 
   useImperativeHandle(ref, () => ({
     restart() {
@@ -663,6 +666,10 @@ export default function AsteroidsGame({
     let lastTime: number | null = null;
 
     function loop(ts: number) {
+      if (pausedRef.current) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
       const dt = lastTime === null ? 0 : Math.min((ts - lastTime) / 1000, 0.05);
       lastTime = ts;
       update(dt);

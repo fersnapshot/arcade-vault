@@ -71,8 +71,11 @@ export default function SnakeGame({
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLevel, onGameOver, onPause };
+  }, [onScore, onLevel, onGameOver, onPause]);
+
+  useLayoutEffect(() => {
     skinRef.current = skin ?? "classic";
-  });
+  }, [skin]);
 
   useImperativeHandle(ref, () => ({
     restart(startLevel = 1) {
@@ -428,7 +431,12 @@ export default function SnakeGame({
         restartLevelRef.current = null;
       }
 
-      if (!pausedRef.current && !gameOver) {
+      if (pausedRef.current) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
+
+      if (!gameOver) {
         tickAccum += dt;
         const interval = TICK_MS[level] ?? 200;
         while (tickAccum >= interval) {
