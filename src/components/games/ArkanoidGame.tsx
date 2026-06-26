@@ -180,8 +180,11 @@ export default function ArkanoidGame({
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLives, onLevel, onGameOver, onPause, onMute };
+  }, [onScore, onLives, onLevel, onGameOver, onPause, onMute]);
+
+  useLayoutEffect(() => {
     skinRef.current = skin ?? "classic";
-  });
+  }, [skin]);
 
   useImperativeHandle(ref, () => ({
     restart(level?: number) {
@@ -573,6 +576,10 @@ export default function ArkanoidGame({
     let lastTime: number | null = null;
 
     function loop(ts: number) {
+      if (pausedRef.current) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
       const delta = lastTime === null ? 16 : Math.min(ts - lastTime, 50);
       lastTime = ts;
       update(delta);

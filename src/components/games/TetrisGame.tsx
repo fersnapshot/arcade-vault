@@ -161,8 +161,11 @@ export default function TetrisGame({
 
   useLayoutEffect(() => {
     cbRef.current = { onScore, onLines, onLevel, onGameOver, onPause };
+  }, [onScore, onLines, onLevel, onGameOver, onPause]);
+
+  useLayoutEffect(() => {
     skinRef.current = skin;
-  });
+  }, [skin]);
 
   useImperativeHandle(ref, () => ({
     restart(startLevel = 1) {
