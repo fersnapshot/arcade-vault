@@ -1122,12 +1122,12 @@ export default function FroggerGame({
       }
     }
 
-    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", onKeyDown);
     init();
     rafId = requestAnimationFrame(loop);
 
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keydown", onKeyDown);
       cancelAnimationFrame(rafId);
     };
   }, []);
