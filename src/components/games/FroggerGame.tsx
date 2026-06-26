@@ -337,9 +337,15 @@ export default function FroggerGame({
 
   useLayoutEffect(() => {
     cbRef.current = { onScoreChange, onLivesChange, onLevelChange, onGameOver };
+  }, [onScoreChange, onLivesChange, onLevelChange, onGameOver]);
+
+  useLayoutEffect(() => {
     pausedRef.current = paused;
+  }, [paused]);
+
+  useLayoutEffect(() => {
     skinRef.current = skin;
-  });
+  }, [skin]);
 
   useImperativeHandle(ref, () => ({
     restart() {
