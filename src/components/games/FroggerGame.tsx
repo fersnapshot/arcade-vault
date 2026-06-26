@@ -943,7 +943,50 @@ export default function FroggerGame({
       ctx.fill();
     }
 
-    function drawFrog(fx: number, fy: number) {
+    function drawLegs(
+      fx: number,
+      fy: number,
+      animProg: number,
+      dx: number,
+      dy: number,
+    ) {
+      const pal = SKINS[skinRef.current];
+      const extend = Math.sin(Math.min(animProg, 1) * Math.PI) * 9;
+      if (skinRef.current === "neon") {
+        ctx.shadowColor = pal.frog;
+        ctx.shadowBlur = 8;
+      }
+      ctx.fillStyle = pal.frog;
+      // back legs push opposite to jump; front legs reach toward jump
+      const feet = [
+        { ox: -10, oy: 7, back: true },
+        { ox: 10, oy: 7, back: true },
+        { ox: -10, oy: -5, back: false },
+        { ox: 10, oy: -5, back: false },
+      ];
+      for (const f of feet) {
+        const push = f.back ? -extend : extend * 0.55;
+        ctx.beginPath();
+        ctx.arc(
+          fx + f.ox + dx * push,
+          fy + f.oy + dy * push,
+          4,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+      }
+      if (skinRef.current === "neon") ctx.shadowBlur = 0;
+    }
+
+    function drawFrog(
+      fx: number,
+      fy: number,
+      animProg: number,
+      dx: number,
+      dy: number,
+    ) {
+      if (animProg > 0) drawLegs(fx, fy, animProg, dx, dy);
       const s = skinRef.current;
       if (s === "neon") drawFrogNeon(fx, fy);
       else if (s === "retro") drawFrogRetro(fx, fy);
@@ -1044,8 +1087,11 @@ export default function FroggerGame({
       // Frog
       let fx: number;
       let fy: number;
+      const animProg = frog.animating ? Math.min(frog.animT / JUMP_MS, 1) : 0;
+      const jumpDx = frog.targetCol - frog.fromCol;
+      const jumpDy = frog.targetRow - frog.fromRow;
       if (frog.animating) {
-        const t = Math.min(frog.animT / JUMP_MS, 1);
+        const t = animProg;
         fx =
           (frog.fromCol + (frog.targetCol - frog.fromCol) * t) * CELL +
           CELL / 2;
@@ -1057,7 +1103,7 @@ export default function FroggerGame({
         fx = frog.col * CELL + CELL / 2;
         fy = HUD_H + frog.row * CELL + CELL / 2;
       }
-      drawFrog(fx, fy);
+      drawFrog(fx, fy, animProg, jumpDx, jumpDy);
       ctx.shadowBlur = 0;
 
       // HUD overlay — franja dedicada arriba del juego
