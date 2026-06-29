@@ -1,6 +1,6 @@
 # SPEC 14 — Hardening de seguridad
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 04-supabase-integration, 13-user-auth
 - **Date:** 2026-06-29
 - **Objective:** Habilitar RLS en las tablas `games` y `scores`, eliminar la función
@@ -133,22 +133,22 @@ Solo modificación de `next.config.ts`; no hay nuevos tipos ni tablas.
 
 ## Acceptance criteria
 
-- [ ] El advisor `rls_disabled_in_public` no aparece en el panel de Supabase para
+- [x] El advisor `rls_disabled_in_public` no aparece en el panel de Supabase para
       ninguna de las dos tablas.
-- [ ] `SELECT` en `public.games` funciona sin sesión (anon) y con sesión autenticada.
-- [ ] `SELECT` en `public.scores` funciona sin sesión (anon) y con sesión autenticada.
-- [ ] `INSERT` en `public.scores` funciona sin sesión (anon) y con sesión autenticada
+- [x] `SELECT` en `public.games` funciona sin sesión (anon) y con sesión autenticada.
+- [x] `SELECT` en `public.scores` funciona sin sesión (anon) y con sesión autenticada.
+- [x] `INSERT` en `public.scores` funciona sin sesión (anon) y con sesión autenticada
       (guardar score desde el modal de game-over sigue funcionando en ambos casos).
-- [ ] La función `public.rls_auto_enable()` ya no existe; los warnings
+- [x] La función `public.rls_auto_enable()` ya no existe; los warnings
       `anon_security_definer_function_executable` y
       `authenticated_security_definer_function_executable` desaparecen del panel.
-- [ ] Las respuestas HTTP de la app incluyen los headers `X-Content-Type-Options: nosniff`,
+- [x] Las respuestas HTTP de la app incluyen los headers `X-Content-Type-Options: nosniff`,
       `X-Frame-Options: DENY` y `Referrer-Policy: strict-origin-when-cross-origin`.
-- [ ] En el tab "Registrarse", intentar enviar con una contraseña que no cumpla la regex
+- [x] En el tab "Registrarse", intentar enviar con una contraseña que no cumpla la regex
       muestra un error inline y no llama a Supabase.
-- [ ] Una contraseña que cumpla todos los requisitos (≥8 chars, minúscula, mayúscula,
+- [x] Una contraseña que cumpla todos los requisitos (≥8 chars, minúscula, mayúscula,
       dígito, símbolo) pasa la validación y el formulario continúa.
-- [ ] `npm run build` completa sin errores de TypeScript.
+- [x] `npm run build` completa sin errores de TypeScript.
 
 ---
 
