@@ -88,7 +88,7 @@ export default function Nav() {
               </span>
               <button
                 onClick={() => void signOut()}
-                className="font-mono text-xs text-white/40 hover:text-white tracking-widest transition-colors"
+                className="font-mono text-xs border border-[var(--cyan)] text-[var(--cyan)] px-3 py-1.5 tracking-widest hover:bg-[var(--cyan)] hover:text-black transition-all"
               >
                 SALIR
               </button>
@@ -186,7 +186,7 @@ export default function Nav() {
                     void signOut();
                     setOpen(false);
                   }}
-                  className="font-mono text-xs text-white/40 hover:text-white tracking-widest"
+                  className="font-mono text-xs border border-[var(--cyan)] text-[var(--cyan)] px-3 py-2 tracking-widest block text-center"
                 >
                   SALIR
                 </button>

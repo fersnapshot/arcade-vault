@@ -1,6 +1,6 @@
 # SPEC 13 — Autenticación de usuarios
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 04-supabase-integration, 06-games-db-and-leaderboard
 - **Date:** 2026-06-28
 - **Objective:** Implementar login, registro y sesión persistente con Supabase Auth
@@ -132,25 +132,25 @@ no requiere cambios.
 
 ## Acceptance criteria
 
-- [ ] La sesión persiste tras recargar sin middleware (refresco client-side del browser client + refresco on-demand en Server Action/Route Handler).
-- [ ] `GET /auth/callback?code=...` intercambia el código y redirige a `/` sin error.
-- [ ] `/auth` muestra dos tabs: "Iniciar Sesión" y "Registrarse".
-- [ ] El formulario de registro con email + password envía el email de confirmación
+- [x] La sesión persiste tras recargar sin middleware (refresco client-side del browser client + refresco on-demand en Server Action/Route Handler).
+- [x] `GET /auth/callback?code=...` intercambia el código y redirige a `/` sin error.
+- [x] `/auth` muestra dos tabs: "Iniciar Sesión" y "Registrarse".
+- [x] El formulario de registro con email + password envía el email de confirmación
       (Supabase SMTP) y muestra el mensaje informativo sin redirigir.
-- [ ] El formulario de login con email + password redirige a `/` tras éxito.
-- [ ] Los botones "Continuar con Google" y "Continuar con GitHub" inician el flujo
+- [x] El formulario de login con email + password redirige a `/` tras éxito.
+- [x] Los botones "Continuar con Google" y "Continuar con GitHub" inician el flujo
       OAuth y completan la autenticación vía `/auth/callback`.
-- [ ] Errores de Supabase Auth (credenciales incorrectas, email ya registrado, etc.)
+- [x] Errores de Supabase Auth (credenciales incorrectas, email ya registrado, etc.)
       se muestran inline bajo el formulario.
-- [ ] `UserContext` expone el `User` de Supabase; la sesión persiste tras recargar.
-- [ ] El Nav muestra el nombre del usuario autenticado (`user_metadata.name` o email
+- [x] `UserContext` expone el `User` de Supabase; la sesión persiste tras recargar.
+- [x] El Nav muestra el nombre del usuario autenticado (`user_metadata.name` o email
       recortado) y el botón SALIR cierra la sesión correctamente.
-- [ ] El modal de game-over pre-rellena el input de nombre con el nombre del usuario
+- [x] El modal de game-over pre-rellena el input de nombre con el nombre del usuario
       autenticado (editable antes de guardar).
-- [ ] `saveScore` guarda `user_id` real cuando el usuario está autenticado y `null`
+- [x] `saveScore` guarda `user_id` real cuando el usuario está autenticado y `null`
       cuando no lo está.
-- [ ] Un usuario no autenticado puede seguir jugando y guardando scores con nombre libre.
-- [ ] `npm run build` completa sin errores de TypeScript.
+- [x] Un usuario no autenticado puede seguir jugando y guardando scores con nombre libre.
+- [x] `npm run build` completa sin errores de TypeScript.
 
 ---
 
