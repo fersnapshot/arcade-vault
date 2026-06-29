@@ -86,8 +86,6 @@ export async function getRecentScores(limit = 6): Promise<Score[]> {
 
 export async function insertScore(data: InsertScore): Promise<void> {
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("scores")
-    .insert({ ...data, user_id: null });
+  const { error } = await supabase.from("scores").insert(data);
   if (error) throw error;
 }
