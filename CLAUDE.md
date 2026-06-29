@@ -32,6 +32,7 @@ No se ha configurado ningún ejecutor (motor) de pruebas.
 - `@skin-designer` — garantiza ≥3 skins (`classic`, `neon`, `retro`) en un juego implementado.
 - `@mobile-porter` — garantiza soporte móvil (SPEC 10) en un juego implementado.
 - `@game-performance-booster` — aplica patrones de rendimiento (SPEC 12) a un juego implementado.
+- `@security-auditor` — audita seguridad y reporta hallazgos.
 
 ## Arquitectura
 
