@@ -10,6 +10,7 @@ import SnakeGame, {
 import { VirtualGamepad } from "@/components/ui/VirtualGamepad";
 import { saveScore } from "./actions";
 import { useSkinLocalStorage } from "@/hooks/useSkinLocalStorage";
+import { useUser } from "@/context/UserContext";
 
 const GAMEPAD_KEYMAP = {
   up: "ArrowUp",
@@ -31,6 +32,7 @@ const SKINS: { id: SkinId; label: string }[] = [
 export default function SnakePage() {
   const router = useRouter();
   const gameRef = useRef<SnakeRef>(null);
+  const { user } = useUser();
 
   const [gameState, setGameState] = useState<GameState>("selecting");
   const [selectedLevel, setSelectedLevel] = useState(1);
@@ -38,7 +40,9 @@ export default function SnakePage() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
   const [finalScore, setFinalScore] = useState(0);
-  const [playerName, setPlayerName] = useState("");
+  const [playerName, setPlayerName] = useState(
+    user?.user_metadata?.name ?? user?.email?.split("@")[0] ?? "",
+  );
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
