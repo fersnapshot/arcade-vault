@@ -27,11 +27,11 @@ No se ha configurado ningún ejecutor (motor) de pruebas.
 
 ## Agentes
 
-- `@game-planner` — planifica y decide qué juego nuevo encaja con la plataforma. Lee el catálogo actual y la memoria de propuestas previas (`references/suggested-games.md`), recomienda UN juego con razonamiento, y actualiza la memoria al terminar. No escribe specs ni código. Usar antes de `/spec-game`.
-- `@game-jam` — dado el **nombre de un juego** (con descripción opcional), genera de forma autónoma **2 specs completos** (variantes A y B) en `specs/game-jam/<game-id>/`, listos para revisar y elegir con `/spec-impl`. No hace preguntas, no implementa código.
-- `@skin-designer` — dado el **id o nombre de un juego ya implementado**, audita su sistema de skins y garantiza que tenga al menos 3: `classic` (default), `neon` y `retro`. Implementa las que falten modificando el componente del juego y su página player. No toca la lógica de gameplay ni la página de detalle.
-- `@mobile-porter` — dado el **id o nombre de un juego ya implementado**, audita y garantiza que sea jugable en móvil (SPEC 10): integra `VirtualGamepad` con el `keyMap` correcto, layout responsive y botones de pausa/salir/skin. No modifica la lógica de gameplay ni `VirtualGamepad.tsx`.
-- `@game-performance-booster` — dado el **id o nombre de un juego ya implementado**, audita su componente canvas y aplica los patrones de rendimiento del SPEC 12: skip draw/update en pausa, lookup O(n) → `Map`, `useLayoutEffect` con deps explícitas y auditoría de callbacks. No toca gameplay ni `VirtualGamepad.tsx`.
+- `@game-planner` — recomienda UN juego nuevo que encaje en la plataforma. Usar antes de `/spec-game`.
+- `@game-jam` — genera 2 specs completos (variantes A y B) para un juego dado. No implementa código.
+- `@skin-designer` — garantiza ≥3 skins (`classic`, `neon`, `retro`) en un juego implementado.
+- `@mobile-porter` — garantiza soporte móvil (SPEC 10) en un juego implementado.
+- `@game-performance-booster` — aplica patrones de rendimiento (SPEC 12) a un juego implementado.
 
 ## Arquitectura
 
@@ -55,10 +55,16 @@ Cada juego real tiene rutas dedicadas (las genéricas `/games/[id]` y `/player/[
 - `src/app/player/<id>/page.tsx` — página `"use client"`: monta el juego en `div.crt-screen`, HUD de React (score / vidas / nivel), overlay de pausa, modal de game-over con input de nombre + guardar.
 - `src/app/player/<id>/actions.ts` — server action `saveScore` que llama a `insertScore` (siempre `user_id: null`; auth aún no implementado).
 
-Juegos implementados: **Asteroids**, **Tetris**, **Arkanoid**, **Snake** y más (ver `references/implemented-games.md`).
+Juegos implementados: ver `references/implemented-games.md`.
 
 La sesión de usuario es client-only en memoria via `src/context/UserContext.tsx` (`useUser`); no es auth real.
 
+## Specs
+
+Todos los specs viven en `specs/NN-slug.md` (numeración secuencial).
+
+Los specs de game-jam viven en `specs/game-jam/<game-id>/`.
+
 ## Flujo de trabajo
 
-Las funcionalidades se construyen spec-first. Para un juego nuevo usar `/spec-game <nombre|referencia>` para escribir el spec, luego `/spec-impl NN-slug` para implementarlo. Los fuentes de los juegos pueden venir de `references/started-games/`. Los specs generales viven en `specs/`. Seguir las pautas en <https://github.com/Klerith/fernando-skills>.
+Las funcionalidades se construyen spec-first. Para un juego nuevo usar `/spec-game <nombre|referencia>` para escribir el spec, luego `/spec-impl NN-slug` para implementarlo. Los fuentes de los juegos pueden venir de `references/started-games/`. Seguir las pautas en <https://github.com/Klerith/fernando-skills>.

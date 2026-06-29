@@ -22,6 +22,34 @@ export default function Nav() {
       ? pathname === "/"
       : pathname === href || pathname.startsWith(href + "/");
 
+  const getInitials = (displayName: string) =>
+    displayName
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase();
+
+  const userAvatar = user
+    ? (() => {
+        const name =
+          user.user_metadata?.name ?? user.email?.split("@")[0] ?? "?";
+        const avatarUrl: string | undefined = user.user_metadata?.avatar_url;
+        return avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="w-6 h-6 rounded-full object-cover shrink-0"
+          />
+        ) : (
+          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[var(--cyan)] text-black font-mono font-bold text-[9px] shrink-0">
+            {getInitials(name)}
+          </span>
+        );
+      })()
+    : null;
+
   return (
     <nav className="sticky top-0 z-50 border-b border-white/10 bg-[var(--bg)]/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-7xl items-center gap-8 px-4 py-3">
@@ -83,12 +111,13 @@ export default function Nav() {
         <div className="hidden md:flex items-center shrink-0">
           {user ? (
             <div className="flex items-center gap-4">
-              <span className="font-mono text-xs text-[var(--yellow)] tracking-widest">
-                ▶ {user.name}
+              <span className="font-mono text-xs text-[var(--yellow)] tracking-widest flex items-center gap-2">
+                {userAvatar}
+                {user.user_metadata?.name ?? user.email?.split("@")[0]}
               </span>
               <button
-                onClick={signOut}
-                className="font-mono text-xs text-white/40 hover:text-white tracking-widest transition-colors"
+                onClick={() => void signOut()}
+                className="font-mono text-xs border border-[var(--cyan)] text-[var(--cyan)] px-3 py-1.5 tracking-widest hover:bg-[var(--cyan)] hover:text-black transition-all"
               >
                 SALIR
               </button>
@@ -178,15 +207,16 @@ export default function Nav() {
             </div>
             {user ? (
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-[var(--yellow)] tracking-widest">
-                  ▶ {user.name}
+                <span className="font-mono text-xs text-[var(--yellow)] tracking-widest flex items-center gap-2">
+                  {userAvatar}
+                  {user.user_metadata?.name ?? user.email?.split("@")[0]}
                 </span>
                 <button
                   onClick={() => {
-                    signOut();
+                    void signOut();
                     setOpen(false);
                   }}
-                  className="font-mono text-xs text-white/40 hover:text-white tracking-widest"
+                  className="font-mono text-xs border border-[var(--cyan)] text-[var(--cyan)] px-3 py-2 tracking-widest block text-center"
                 >
                   SALIR
                 </button>

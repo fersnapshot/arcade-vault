@@ -1,7 +1,18 @@
 "use server";
 
 import { insertScore } from "@/lib/supabase/queries";
+import { createClient } from "@/lib/supabase/server";
 
 export async function saveScore(playerName: string, score: number) {
-  await insertScore({ game_id: "tetris", score, player_name: playerName });
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  await insertScore({
+    game_id: "tetris",
+    score,
+    player_name: playerName,
+    user_id: user?.id ?? null,
+  });
 }

@@ -26,4 +26,5 @@ export interface InsertScore {
   game_id: string;
   score: number;
   player_name: string;
+  user_id?: string | null;
 }
