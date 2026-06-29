@@ -7,6 +7,8 @@ import { useUser } from "@/context/UserContext";
 
 type Tab = "login" | "register";
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
 export default function AuthPage() {
   const { user } = useUser();
   const [tab, setTab] = useState<Tab>("login");
@@ -49,6 +51,13 @@ export default function AuthPage() {
         router.refresh();
       }
     } else {
+      if (!PASSWORD_REGEX.test(password)) {
+        setError(
+          "La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un dígito y un símbolo.",
+        );
+        setLoading(false);
+        return;
+      }
       const { error } = await supabase.auth.signUp({
         email,
         password,
