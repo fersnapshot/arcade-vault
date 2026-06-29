@@ -84,10 +84,10 @@ export default function Nav() {
           {user ? (
             <div className="flex items-center gap-4">
               <span className="font-mono text-xs text-[var(--yellow)] tracking-widest">
-                ▶ {user.name}
+                ▶ {user.user_metadata?.name ?? user.email?.split("@")[0]}
               </span>
               <button
-                onClick={signOut}
+                onClick={() => void signOut()}
                 className="font-mono text-xs text-white/40 hover:text-white tracking-widest transition-colors"
               >
                 SALIR
@@ -179,11 +179,11 @@ export default function Nav() {
             {user ? (
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs text-[var(--yellow)] tracking-widest">
-                  ▶ {user.name}
+                  ▶ {user.user_metadata?.name ?? user.email?.split("@")[0]}
                 </span>
                 <button
                   onClick={() => {
-                    signOut();
+                    void signOut();
                     setOpen(false);
                   }}
                   className="font-mono text-xs text-white/40 hover:text-white tracking-widest"
