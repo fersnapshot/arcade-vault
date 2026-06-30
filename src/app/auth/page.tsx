@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useUser } from "@/context/UserContext";
 
@@ -9,12 +9,37 @@ type Tab = "login" | "register";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
+function normalizeAuthError(msg: string): string {
+  if (msg.includes("Invalid login credentials"))
+    return "Email o contraseña incorrectos.";
+  if (msg.includes("Email not confirmed"))
+    return "Debes confirmar tu email antes de iniciar sesión.";
+  if (msg.includes("User already registered"))
+    return "Ya existe una cuenta con ese email.";
+  if (msg.includes("Password should be"))
+    return "La contraseña no cumple los requisitos mínimos.";
+  return "Ocurrió un error. Inténtalo de nuevo.";
+}
+
 export default function AuthPage() {
+  return (
+    <Suspense>
+      <AuthPageInner />
+    </Suspense>
+  );
+}
+
+function AuthPageInner() {
   const { user } = useUser();
+  const searchParams = useSearchParams();
   const [tab, setTab] = useState<Tab>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(() =>
+    searchParams.get("error") === "callback_failed"
+      ? "El enlace ha expirado o no es válido. Solicita uno nuevo."
+      : null,
+  );
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -45,7 +70,7 @@ export default function AuthPage() {
         password,
       });
       if (error) {
-        setError(error.message);
+        setError(normalizeAuthError(error.message));
       } else {
         router.push("/");
         router.refresh();
@@ -66,7 +91,7 @@ export default function AuthPage() {
         },
       });
       if (error) {
-        setError(error.message);
+        setError(normalizeAuthError(error.message));
       } else {
         setInfo("Revisa tu correo para confirmar tu cuenta.");
       }
@@ -77,12 +102,16 @@ export default function AuthPage() {
 
   async function handleOAuth(provider: "google" | "github") {
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
+    if (error)
+      setError(
+        "No se pudo iniciar sesión con " + provider + ". Inténtalo de nuevo.",
+      );
   }
 
   return (
