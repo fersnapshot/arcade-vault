@@ -9,6 +9,18 @@ type Tab = "login" | "register";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
+function normalizeAuthError(msg: string): string {
+  if (msg.includes("Invalid login credentials"))
+    return "Email o contraseña incorrectos.";
+  if (msg.includes("Email not confirmed"))
+    return "Debes confirmar tu email antes de iniciar sesión.";
+  if (msg.includes("User already registered"))
+    return "Ya existe una cuenta con ese email.";
+  if (msg.includes("Password should be"))
+    return "La contraseña no cumple los requisitos mínimos.";
+  return "Ocurrió un error. Inténtalo de nuevo.";
+}
+
 export default function AuthPage() {
   const { user } = useUser();
   const [tab, setTab] = useState<Tab>("login");
@@ -45,7 +57,7 @@ export default function AuthPage() {
         password,
       });
       if (error) {
-        setError(error.message);
+        setError(normalizeAuthError(error.message));
       } else {
         router.push("/");
         router.refresh();
@@ -66,7 +78,7 @@ export default function AuthPage() {
         },
       });
       if (error) {
-        setError(error.message);
+        setError(normalizeAuthError(error.message));
       } else {
         setInfo("Revisa tu correo para confirmar tu cuenta.");
       }
