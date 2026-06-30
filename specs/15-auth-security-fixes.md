@@ -1,6 +1,6 @@
 # SPEC 15 — Correcciones de seguridad en autenticación
 
-- **Status:** Aprobado
+- **Status:** Implementado
 - **Depends on:** 13-user-auth, 14-security-hardening
 - **Date:** 2026-06-30
 - **Objective:** Corregir cuatro hallazgos de seguridad identificados en la auditoría
@@ -127,17 +127,17 @@ en lógica de cliente y route handlers existentes.
 
 ## Acceptance criteria
 
-- [ ] `GET /auth/callback` sin `code` redirige a `/auth?error=callback_failed`.
-- [ ] `GET /auth/callback?code=<inválido>` redirige a `/auth?error=callback_failed`
+- [x] `GET /auth/callback` sin `code` redirige a `/auth?error=callback_failed`.
+- [x] `GET /auth/callback?code=<inválido>` redirige a `/auth?error=callback_failed`
       y la página `/auth` muestra el mensaje de error correspondiente.
-- [ ] `GET /auth/callback?code=<válido>` sigue redirigiendo a `/` con sesión activa.
-- [ ] `UserContext` inicializa el usuario con `getUser()` (verificación server-side);
+- [x] `GET /auth/callback?code=<válido>` sigue redirigiendo a `/` con sesión activa.
+- [x] `UserContext` inicializa el usuario con `getUser()` (verificación server-side);
       un token revocado no mantiene al usuario logueado hasta que expire.
-- [ ] Si `signInWithOAuth` devuelve error, se muestra un mensaje inline en la UI;
+- [x] Si `signInWithOAuth` devuelve error, se muestra un mensaje inline en la UI;
       no ocurre fallo silencioso.
-- [ ] Los mensajes de error de login/registro muestran texto en español sin detalles
+- [x] Los mensajes de error de login/registro muestran texto en español sin detalles
       técnicos internos de Supabase.
-- [ ] `npm run build` completa sin errores de TypeScript.
+- [x] `npm run build` completa sin errores de TypeScript.
 
 ---
 
