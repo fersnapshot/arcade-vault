@@ -77,12 +77,16 @@ export default function AuthPage() {
 
   async function handleOAuth(provider: "google" | "github") {
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
+    if (error)
+      setError(
+        "No se pudo iniciar sesión con " + provider + ". Inténtalo de nuevo.",
+      );
   }
 
   return (
